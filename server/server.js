@@ -1,10 +1,10 @@
 const express = require("express")
 const session = require('express-session');
 const cors = require("cors");
+const routes = require('./routes');
 const bodyParser = require("body-parser");
 const configDatabase = require("./database.js")
 const dotenv = require("dotenv");
-const game = require('./game');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const app = express();
 
@@ -22,8 +22,8 @@ app.use(bodyParser.text());
 
 //Session setup
 const store = new MongoDBStore({
-    uri: 'mongodb+srv://etbunce:admin@cluster0.wfxwmek.mongodb.net/?retryWrites=true&w=majority',
-    databaseName: 'connect-mongodb-session-store-grid-game',
+    uri: 'mongodb+srv://jzdegrey:cs3750@sandbox.t6lzk2q.mongodb.net/gridWordFinder',
+    databaseName: 'grid-game-sessions',
 });
 
 store.on('error', function(error) {
@@ -45,8 +45,6 @@ app.use('/', routes);
 
 
 // Logic
-
-game.newGame();
 
 // Listen
 app.listen(PORT, () => { console.log("server is running on http://localhost:4000 (or 5000)"); });
