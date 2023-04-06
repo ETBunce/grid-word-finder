@@ -3,9 +3,9 @@ import {createRoot} from 'react-dom';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import "./index.css";
 import axios from "axios";
-// import GridGame from './components/GridGame';
-import HighScores from './components/HighScores';
-// import SubmitScore from './components/SubmitScore';
+import GridGame from './components/GridGame';
+import Results from './components/Results';
+import Lobby from './components/Lobby';
 
 function App(){
     axios.defaults.withCredentials = true;
@@ -13,10 +13,9 @@ function App(){
     return (
       <div>
         <Routes>
-            <Route path="high-scores" element={<HighScores />} />
-          {/* <Route exact path="/" element={<GridGame />} />  
-          <Route path="high-scores" element={<HighScores />} />
-          <Route path="submit-score" element={<SubmitScore />} /> */}
+            <Route exact path="/" element={<GridGame />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/lobby" element={<Lobby />} />
         </Routes>
       </div>
     );
