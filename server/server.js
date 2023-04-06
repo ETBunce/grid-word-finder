@@ -46,5 +46,16 @@ app.use('/', routes);
 
 // Logic
 
+//TEST:
+const AppGame = require('./models/game');
+AppGame.create({state:{message:'brooo'}})
+    .then((game) => {
+        console.log('created a game');
+    })
+    .catch((err) => {
+        console.log('error creating game: ', err);
+    })
+//////
+
 // Listen
 app.listen(PORT, () => { console.log("server is running on http://localhost:4000 (or 5000)"); });
