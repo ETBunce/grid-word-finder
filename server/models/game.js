@@ -7,7 +7,7 @@ const GameSchema = mongoose.Schema(
             required: true
         }
     }
-)
+);
 
 const AppGameSchema = mongoose.model("game", GameSchema);
 
