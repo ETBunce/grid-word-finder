@@ -10,7 +10,7 @@ const GameSchema = mongoose.Schema(
     {
         players: [PlayerSchema],
         grid: String,
-        finished: Boolean
+        startTime: Number
     }
 );
 
