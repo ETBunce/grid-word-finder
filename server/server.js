@@ -48,13 +48,28 @@ app.use('/', routes);
 
 //TEST:
 const AppGame = require('./models/game');
-AppGame.create({state:{message:'brooo'}})
-    .then((game) => {
-        console.log('created a game');
-    })
-    .catch((err) => {
-        console.log('error creating game: ', err);
-    })
+// const newGame = {
+//     players:[],
+//     grid:'abcdefg',
+//     finished: false
+// }
+// AppGame.create(newGame)
+//     .then((game) => {
+//         console.log('created a game');
+//     })
+//     .catch((err) => {
+//         console.log('error creating game: ', err);
+//     })
+
+// AppGame.findOne()
+//     .then((game) => {
+//         console.log('got the game');
+//         game.players.push({name:'bob',words:['hi','banana','apple'],score:4});
+//         game.save();
+//     })
+//     .catch((err) => {
+//         console.log('error finding one game');
+//     })
 //////
 
 // Listen

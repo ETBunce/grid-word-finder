@@ -1,11 +1,16 @@
 const mongoose = require('mongoose')
 
+const PlayerSchema = mongoose.Schema({
+    name: String,
+    words: [String],
+    score: Number
+})
+
 const GameSchema = mongoose.Schema(
     {
-        state: {
-            type: Document,
-            required: true
-        }
+        players: [PlayerSchema],
+        grid: String,
+        finished: Boolean
     }
 );
 
