@@ -58,12 +58,10 @@ function generateGrid() {
 function withGame(func, errorFunc) {
     AppGame.findOne({_id:gameId})
     .then((game) => {
-        console.log('success finding game');
         func(game);
         game.save();
     })
     .catch((err) => {
-        console.log('error finding game: ' + err.message);
         errorFunc && errorFunc(err);
     });
 }
@@ -133,4 +131,10 @@ exports.submitWord = (playerName, word) => {
     //     console.log('doing a thing with game: ', game._id);
     // })
     ///////////////
+}
+
+exports.requestGameGrid = (req, res) => {
+    withGame((game) => {
+        res.send(game.grid);
+    });
 }
