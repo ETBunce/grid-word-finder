@@ -9,6 +9,7 @@ export function GridGame() {
     const [wordList, setWordList] = useState([]);
     const [wordListString, setWordListString] = useState("");
     const [status, setStatus] = useState("");
+    const [playerScore, setPlayerScore] = useState(0);
 
     // get function gets game board, players
     useEffect(() => {
@@ -127,12 +128,26 @@ export function GridGame() {
         if(!wordList.includes(word)){
             // post method to submit word
 
-            // then if word is confirmed a real word, add it to the display list
+            // then if word is confirmed a real word
+            // increase player score
+            let pointsGained = increaseScore();
+            setPlayerScore(playerScore + pointsGained);
+            // add word to the display list
             setWordList([...wordList, word]);
-            setStatus("Word found!");
+            setStatus("Word found! " + pointsGained + " points added!");
         } else{
             setStatus("Word already used!");
         }
+    }
+
+    function increaseScore(){
+        if(word.length === 3){return 1;}
+        else if (word.length === 4){return 2;}
+        else if (word.length === 5){return 4;}
+        else if (word.length === 6){return 7;}
+        else if (word.length === 7){return 11;}
+        else if (word.length === 8){return 16;}
+        else if (word.length > 8){return 22;}
     }
 
     useEffect(() => {
@@ -154,7 +169,7 @@ export function GridGame() {
         <center>
             <h1>Grid Word Find</h1><br />
             <div className="row">
-                <div className="col-md-3"><h2>Player 1</h2><h3>Score</h3></div>
+                <div className="col-md-3"><h2>This Player</h2><h3>{playerScore}</h3></div>
                 <div className="col-md-3"><h2>Player 2</h2><h3>Score</h3></div>
                 <div className="col-md-3"><h2>Player 3</h2><h3>Score</h3></div>
                 <div className="col-md-3"><h2>Player 4</h2><h3>Score</h3></div>
