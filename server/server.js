@@ -44,7 +44,7 @@ app.use(session({
 }));
 
 // Routes
-app.use('*', routes);
+app.use('/', routes);
 
 
 // Logic
