@@ -11,13 +11,11 @@ function App(){
     axios.defaults.withCredentials = true;
   
     return (
-      <div>
         <Routes>
             <Route exact path="/" element={<GridGame />} />
             <Route path="/results" element={<Results />} />
             <Route path="/lobby" element={<Lobby />} />
         </Routes>
-      </div>
     );
   }
   
