@@ -19,6 +19,7 @@ configDatabase();
 app.use(express.json({ extended: false }));
 app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.text());
+app.use(bodyParser.json());
 
 
 //Session setup
