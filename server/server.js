@@ -18,7 +18,7 @@ dotenv.config();
 configDatabase();
 
 app.use(express.json({ extended: false }));
-app.use(cors({ origin: "http://localhost:4000", credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
