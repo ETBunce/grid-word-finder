@@ -6,6 +6,9 @@ export function GridGame() {
     const [word, setWord] = useState("");
     const [wordError, setWordError] = useState("");
     const [wordErrorFound, setWordErrorFound] = useState(false);
+    const [wordList, setWordList] = useState([]);
+    const [wordListString, setWordListString] = useState("");
+    const [status, setStatus] = useState("");
 
     // get function gets game board, players
     useEffect(() => {
@@ -30,7 +33,7 @@ export function GridGame() {
 
     // runs whenever word changes, checks validity of word
     useEffect(() => {
-        if(word != ""){
+        if(word != "" && word.length > 2){
             let lastLetter = "";
             let lastLetterIndexes = [];
             let currentLetterIndexes = [];
@@ -41,7 +44,7 @@ export function GridGame() {
                 if(board.includes(word[i])){
                     setWordError("");
                 } else {
-                    setWordError("Letter not in board"); // errors if letter not in the board
+                    setWordError("Letter is not on the board."); // errors if letter not in the board
                     break;
                 }
                 // compares the letter to surrounding letters
@@ -98,13 +101,13 @@ export function GridGame() {
                         } // end inner for loop
                     } // end outer for loop
                     if(!letterFound){
-                        setWordError("Word not valid");
+                        setWordError("Word is not valid.");
                         break;
                     }
                 } // end else
             } // end for
         } else {
-            setWordError("No word found");
+            setWordError("Word is not long enough.");
         }
     }, [word]);
 
@@ -121,8 +124,24 @@ export function GridGame() {
     // handles word submission
     function handleSubmit(e){
         e.preventDefault();
-        // post method to submit word
+        if(!wordList.includes(word)){
+            // post method to submit word
+
+            // then if word is confirmed a real word, add it to the display list
+            setWordList([...wordList, word]);
+            setStatus("Word found!");
+        } else{
+            setStatus("Word already used!");
+        }
     }
+
+    useEffect(() => {
+        if(wordList.length > 0){
+            if(wordList.length === 1) {setWordListString(word);}
+            else {setWordListString(wordListString + ", " + word);}
+        }
+        setWord("");
+    }, [wordList])
 
     function handleChange(e) {
         let value = "";
@@ -178,13 +197,12 @@ export function GridGame() {
                             Submit word
                         </button>
                     </form><br /> <br />
-                    {wordErrorFound ? <p>{wordError}</p> : null}
+                    {wordErrorFound ? <p>{wordError}</p> : null}<br />
+                    <p>{status}</p>
                 </div>
                 <div className="col-md-4">
                     <h2>Your words</h2>
-                    <ul>
-                        <li>Word list</li>
-                    </ul>
+                    <p>{wordListString}</p>
                 </div>
             </div>
         </center>
