@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const PlayerSchema = mongoose.Schema({
     name: String,
-    read: Boolean
+    ready: Boolean
 })
 
 const LobbySchema = mongoose.Schema(
