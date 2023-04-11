@@ -7,9 +7,11 @@ export function GridGame() {
 
     // get function gets game board, players
     useEffect(() => {
-        axios.get("http://localhost:4000/game")
+        axios.get("http://localhost:4000/gridSample")
+        // axios.get("http://localhost:4000/game") - Use this line when no longer testing - Ethan
         .then((res) => {
-            setGrid(res.data);
+            // setGrid(res.data); // Old - Ethan
+            setBoard(res.data); // New - Ethan
         })
         .catch(err => console.log(err));
     }, []);

@@ -9,6 +9,29 @@ router.get("/game", controllers.getGrid);
 router.get('/', (req, res)=> { res.send('Hello , world!'); });
 router.get('/getGrid', controllers.getGrid);
 router.get('/playerScores', controllers.getPlayerScores);
+/*
+example result for get /playerScores:
+[ // An array of players
+    { // A player
+        name: String,
+        words: [String], // An array of words the user has guessed
+        score: Number
+    },
+    { // Another player
+        name: String,
+        words: [String],
+        score: Number
+    }
+]
+*/
+
+
+// ROUTES FOR TESTING
+router.get('/gridSample', (req, res) => {
+    // Send an example grid, which is a 16-character string
+    res.send('RAMFCEKOTHVUSBAD');
+});
+
 router.get('/playerScoresSample', (req, res) => { // Used for testing
     res.send([
         {
@@ -28,21 +51,6 @@ router.get('/playerScoresSample', (req, res) => { // Used for testing
             score: 400
         }
     ]);
-})
-/*
-example result:
-[ // An array of players
-    { // A player
-        name: String,
-        words: [String], // An array of words the user has guessed
-        score: Number
-    },
-    { // Another player
-        name: String,
-        words: [String],
-        score: Number
-    }
-]
-*/
+});
 
 module.exports = router;
