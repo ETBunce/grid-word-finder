@@ -1,23 +1,24 @@
-const express = require("express")
+const express = require("express");
+const app = express();
 const session = require('express-session');
 const cors = require("cors");
 const routes = require('./routes');
 const bodyParser = require("body-parser");
-const configDatabase = require("./database.js")
+const configDatabase = require("./database.js");
 const dotenv = require("dotenv");
 const MongoDBStore = require('connect-mongodb-session')(session);
-const app = express();
+
 const gameLogic = require('./game-logic');
 
 // Config
-const PORT = process.env.PORT || 5000
+const PORT = 4000;
 
 // Middleware
 dotenv.config();
 configDatabase();
 
 app.use(express.json({ extended: false }));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: "http://localhost:4000", credentials: true }));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
@@ -43,7 +44,7 @@ app.use(session({
 }));
 
 // Routes
-app.use('/', routes);
+app.use('*', routes);
 
 
 // Logic
@@ -59,4 +60,4 @@ app.use('/', routes);
 
 
 // Listen
-app.listen(PORT, () => { console.log("server is running on http://localhost:4000 (or 5000)"); });
+app.listen(PORT, () => { console.log("server is running on http://localhost:4000"); });
