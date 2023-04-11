@@ -133,8 +133,17 @@ exports.submitWord = (playerName, word) => {
     ///////////////
 }
 
+
+// CONTROLLER INTERFACE
+
 exports.requestGameGrid = (req, res) => {
     withGame((game) => {
         res.send(game.grid);
     });
+}
+
+exports.requestPlayerScores = (req, res) => {
+    withGame((game) => {
+        res.send(game.players);
+    })
 }
