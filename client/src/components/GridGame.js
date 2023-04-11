@@ -133,42 +133,60 @@ export function GridGame() {
 
     return (
         <center>
-            <h1>Main Game</h1>
-            <div id = "grid">
-                <button onClick={() => handleClick(0)}>{board[0]}</button>
-                <button onClick={() => handleClick(1)}>{board[1]}</button>
-                <button onClick={() => handleClick(2)}>{board[2]}</button>
-                <button onClick={() => handleClick(3)}>{board[3]}</button>
-                <br />
-                <button onClick={() => handleClick(4)}>{board[4]}</button>
-                <button onClick={() => handleClick(5)}>{board[5]}</button>
-                <button onClick={() => handleClick(6)}>{board[6]}</button>
-                <button onClick={() => handleClick(7)}>{board[7]}</button>
-                <br />
-                <button onClick={() => handleClick(8)}>{board[8]}</button>
-                <button onClick={() => handleClick(9)}>{board[9]}</button>
-                <button onClick={() => handleClick(10)}>{board[10]}</button>
-                <button onClick={() => handleClick(11)}>{board[11]}</button>
-                <br />
-                <button onClick={() => handleClick(12)}>{board[12]}</button>
-                <button onClick={() => handleClick(13)}>{board[13]}</button>
-                <button onClick={() => handleClick(14)}>{board[14]}</button>
-                <button onClick={() => handleClick(15)}>{board[15]}</button>
-            </div><br />
-            <button onClick={() => undoClick()}>Undo</button><br /><br />
-            <form onSubmit={handleSubmit} noValidate>
-                <label>Enter a word from the grid:</label><br />
-                <input
-                    type="text"
-                    name="word"
-                    value={word}
-                    onChange={handleChange}
-                /><br /><br />
-                <button type="submit" disabled={wordErrorFound}>
-                    Submit word
-                </button>
-            </form><br /> <br />
-            {wordErrorFound ? <p>{wordError}</p> : null}
+            <h1>Grid Word Find</h1><br />
+            <div className="row">
+                <div className="col-md-3"><h2>Player 1</h2><h3>Score</h3></div>
+                <div className="col-md-3"><h2>Player 2</h2><h3>Score</h3></div>
+                <div className="col-md-3"><h2>Player 3</h2><h3>Score</h3></div>
+                <div className="col-md-3"><h2>Player 4</h2><h3>Score</h3></div>
+            </div><br /><br />
+            <div className="row">
+                <div className="col-md-4">
+                    <div id = "grid">
+                        <button onClick={() => handleClick(0)}>{board[0]}</button>
+                        <button onClick={() => handleClick(1)}>{board[1]}</button>
+                        <button onClick={() => handleClick(2)}>{board[2]}</button>
+                        <button onClick={() => handleClick(3)}>{board[3]}</button>
+                        <br />
+                        <button onClick={() => handleClick(4)}>{board[4]}</button>
+                        <button onClick={() => handleClick(5)}>{board[5]}</button>
+                        <button onClick={() => handleClick(6)}>{board[6]}</button>
+                        <button onClick={() => handleClick(7)}>{board[7]}</button>
+                        <br />
+                        <button onClick={() => handleClick(8)}>{board[8]}</button>
+                        <button onClick={() => handleClick(9)}>{board[9]}</button>
+                        <button onClick={() => handleClick(10)}>{board[10]}</button>
+                        <button onClick={() => handleClick(11)}>{board[11]}</button>
+                        <br />
+                        <button onClick={() => handleClick(12)}>{board[12]}</button>
+                        <button onClick={() => handleClick(13)}>{board[13]}</button>
+                        <button onClick={() => handleClick(14)}>{board[14]}</button>
+                        <button onClick={() => handleClick(15)}>{board[15]}</button>
+                    </div><br />
+                    <button onClick={() => undoClick()}>Undo</button><br /><br />
+                </div>
+                <div className="col-md-4">
+                    <form onSubmit={handleSubmit} noValidate>
+                        <label>Enter a word from the grid:</label><br />
+                        <input
+                            type="text"
+                            name="word"
+                            value={word}
+                            onChange={handleChange}
+                        /><br /><br />
+                        <button type="submit" disabled={wordErrorFound}>
+                            Submit word
+                        </button>
+                    </form><br /> <br />
+                    {wordErrorFound ? <p>{wordError}</p> : null}
+                </div>
+                <div className="col-md-4">
+                    <h2>Your words</h2>
+                    <ul>
+                        <li>Word list</li>
+                    </ul>
+                </div>
+            </div>
         </center>
     );
 }
