@@ -64,7 +64,7 @@ function withGame(func, errorFunc) {
     })
     .catch((err) => {
         console.log('error finding game: ' + err.message);
-        errorFunc && errorFunc();
+        errorFunc && errorFunc(err);
     });
 }
 
@@ -76,6 +76,15 @@ function withPlayer(playerName, func, errorFunc) {
             func(player);
         }
     }, errorFunc)
+}
+
+function addScoreEvent(playerName, score) {
+    withGame((game) => { // Do this
+        game.scoreEvents.push({playerName: playerName, score: score});
+    },
+    () => { // Error
+
+    });
 }
 
 exports.startNewGame = (playerList) => {
@@ -119,6 +128,7 @@ exports.submitWord = (playerName, word) => {
     //TODO: check if the word is valid and give the player points
 
     //TEST:
+    addScoreEvent(playerName, word.length); // Just for testing, score is not equal to word length
     // withGame((game)=> {
     //     console.log('doing a thing with game: ', game._id);
     // })
