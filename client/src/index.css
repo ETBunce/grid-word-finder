@@ -30,7 +30,8 @@ body {
     font-size: 30px;
 }
 
-#ready {
-    margin: 30px;
+#RTL {
+    width: 100%;
+    margin: 0px;
     font-size: 30px;
 }

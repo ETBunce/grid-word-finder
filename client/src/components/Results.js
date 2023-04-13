@@ -5,14 +5,12 @@ import { useNavigate } from "react-router-dom";
 export function Results() {
     const [players, setPlayers] = useState([{name: "", words: [""], score: 0}]);
     const [winner, setWinner] = useState();
+    const navigate = useNavigate();
 
     let winnerScore = 0;
 
-    function ready() {
-        axios.post("http://localhost:4000/ready", true)
-        .catch((err) => {
-            console.log("Error showing results" + err.message);
-        });
+    function returnToLobby() {
+        navigate("../");
     }
 
     useLayoutEffect(
@@ -57,7 +55,7 @@ export function Results() {
             <div id="bottom">
                 <h2>Winner</h2>
                 <div id="winner">{winner}</div>
-                <button type="button" id="ready" onClick={ready}>Ready</button>
+                <button type="button" id="RTL" onClick={returnToLobby}>Lobby List</button>
             </div>
         </center>
     );
