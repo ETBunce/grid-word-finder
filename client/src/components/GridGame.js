@@ -34,18 +34,18 @@ export function GridGame() {
 
     // runs whenever word changes, checks validity of word
     useEffect(() => {
-        if(word != "" && word.length > 2){
+        if(word !== "" && word.length > 2){
             let lastLetter = "";
             let lastLetterIndexes = [];
             let currentLetterIndexes = [];
             let letterFound = false;
             let indexesUsed = [];
-            for(let i = 0; i < word.length; i++){
+            for (let i = 0; i < word.length; i++){
                 // checks if letter is in the board
-                if(board.includes(word[i])){
+                if (board.includes(word[i])){
                     setWordError("");
                 } else {
-                    setWordError("Letter is not on the board."); // errors if letter not in the board
+                    setWordError("Letter " + word[i] + " is not on the board."); // errors if letter not in the board
                     break;
                 }
                 // compares the letter to surrounding letters
@@ -115,7 +115,7 @@ export function GridGame() {
     // runs if a word error is found, sets error found to true.
     // separate variables like this ensure the page updates
     useEffect(() => {
-        if(wordError != ""){
+        if(wordError !== ""){
             setWordErrorFound(true);
         } else {
             setWordErrorFound(false);

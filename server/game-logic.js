@@ -1,4 +1,6 @@
 const AppGame = require('./models/game');
+const axios = require('axios');
+
 
 const VOWELS = 'AEIOU';
 const CONSONANTS = 'BCDFGHJKLMNPQRSTVWXYZ';
@@ -159,15 +161,38 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
     })
 }
 
-exports.submitWord = (playerName, word) => {
-    //TODO: check if the word is valid and give the player points
+exports.submitWord = async (req, res) => {
+    const guessedWord = req.body.word;
+    console.log("Player sent word: \"%s\"", guessedWord);
+    let responseToPlayer = {
+        success: false,
+        err: "Unknown Error Occurred"
+    };
 
-    //TEST:
-    addScoreEvent(playerName, word.length); // Just for testing, score is not equal to word length
-    // withGame((game)=> {
-    //     console.log('doing a thing with game: ', game._id);
-    // })
-    ///////////////
+    await axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/" + guessedWord)
+        .then((res) => {
+            console.log("Response from datamsue: %s", JSON.stringify(res.data));
+            responseToPlayer = {
+                success: true,
+                validWord: true
+            };
+        })
+        .catch((err) => {
+            if (err.response.data.title === "No Definitions Found") {
+                console.log("Word is invalid");
+                responseToPlayer = {
+                    success: true,
+                    validWord: false
+                };
+            } else {
+                console.log("Error sending request to datamuse. Error: %s", err.message);
+                responseToPlayer = {
+                    success: false,
+                    err: "Please check server console for error!"
+                };
+            }
+        })
+    res.send(responseToPlayer);
 }
 
 

@@ -9,6 +9,9 @@ router.get("/game", controllers.getGrid);
 router.get('/', (req, res)=> { res.send('Hello , world!'); });
 router.get('/getGrid', controllers.getGrid);
 router.get('/playerScores', controllers.getPlayerScores);
+
+router.post('/submitWord', controllers.submitWord);
+
 /*
 example result for get /playerScores:
 [ // An array of players
