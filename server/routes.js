@@ -30,8 +30,8 @@ example result for get /playerScores:
 // ROUTES FOR TESTING
 router.get('/lobbyListSample', (req, res) => {
     res.send([
-        'Bob',
-        'Kevin'
+        {name: 'Bob', gameId: '_idlskjdfopajbidj'},
+        {name: 'Kevin', gameId: '_idlssdsew234lvkjopeijajbidj'}
     ])
 });
 

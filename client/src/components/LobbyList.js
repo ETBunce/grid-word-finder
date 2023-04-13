@@ -21,6 +21,7 @@ export function LobbyList() {
             {props.name}
             <button onClick={()=> {
                 console.log('button clicked. id is ' + props.gameId);
+                
             }}>Join</button>
         </div>)
     }
@@ -28,7 +29,7 @@ export function LobbyList() {
     function LobbyEntryList() {
         console.log('rendering lobby list: ', lobbyList);
         const result = lobbyList.map((item) => {
-            return <LobbyEntry name={item.name} gameId={item.gameId}/>
+            return <LobbyEntry key={item.gameId} name={item.name} gameId={item.gameId}/>
         });
         console.log('rendering' , result);
         return (result);
