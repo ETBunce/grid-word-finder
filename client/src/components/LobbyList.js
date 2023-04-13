@@ -9,6 +9,7 @@ export function LobbyList() {
         axios.get('http://localhost:4000/lobbyListSample')
         .then((res) => {
             console.log('got the lobby list: ', res.data);
+            setLobbyList(res.data);
         })
         .catch((err) => {
             console.log('error getting lobby list: ', err.message);
@@ -18,21 +19,25 @@ export function LobbyList() {
     function LobbyEntry(props) {
         return(<div>
             {props.name}
-            <button>Join</button>
+            <button onClick={()=> {
+                console.log('button clicked. id is ' + props.gameId);
+            }}>Join</button>
         </div>)
     }
 
     function LobbyEntryList() {
-        let list = [];
-        for (let i = 0; i < lobbyList; i++) {
-            list.push(<LobbyEntry name={lobbyList[i]} />);
-        }
-        return list;
+        console.log('rendering lobby list: ', lobbyList);
+        const result = lobbyList.map((item) => {
+            return <LobbyEntry name={item.name} gameId={item.gameId}/>
+        });
+        console.log('rendering' , result);
+        return (result);
     }
 
     return (
         <center>
             <h1>Lobby List</h1>
+            <LobbyEntryList/>
         </center>
     );
 }

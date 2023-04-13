@@ -6,7 +6,7 @@ exports.getGrid = (req, res)=> {
 }
 
 exports.getPlayerScores = (req, res) => {
-    res.send(gameLogic.requestPlayerScores(req, res));
+    gameLogic.requestPlayerScores(req, res);
 }
 
 exports.getLobbyList = (req, res) => {
@@ -14,7 +14,10 @@ exports.getLobbyList = (req, res) => {
     .then((lobbies) => {
         let list = [];
         for (let i = 0; i < lobbies.length; i++ ) {
-            list.push(lobbies[i].hostPlayerName);
+            list.push({
+                name: lobbies[i].hostPlayerName,
+                gameId: lobbies[i]._id
+            });
         }
         res.send(list);
     })
