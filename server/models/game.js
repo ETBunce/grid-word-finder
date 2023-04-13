@@ -19,7 +19,8 @@ const GameSchema = mongoose.Schema(
         scoreEvents: [ScoreEventSchema],
         grid: String,
         startTime: Number,
-        hostPlayerName: String
+        hostPlayerName: String,
+        canJoin: Boolean
     }
 );
 
