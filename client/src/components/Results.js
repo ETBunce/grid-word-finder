@@ -15,7 +15,7 @@ export function Results() {
 
     useLayoutEffect(
         function() {
-            axios.get("http://localhost:4000/playerScoresSample")
+            axios.get("http://localhost:4000/playerScores")
             .then((res) => {
                 if(res.data != null) {
                     setPlayers(res.data);
