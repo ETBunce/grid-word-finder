@@ -12,6 +12,7 @@ router.get('/playerScores', controllers.getPlayerScores);
 
 router.post('/submitWord', controllers.submitWord);
 
+router.get('/lobbies', controllers.getLobbyList);
 /*
 example result for get /playerScores:
 [ // An array of players
@@ -30,6 +31,13 @@ example result for get /playerScores:
 
 
 // ROUTES FOR TESTING
+router.get('/lobbyListSample', (req, res) => {
+    res.send([
+        {name: 'Bob', gameId: '_idlskjdfopajbidj'},
+        {name: 'Kevin', gameId: '_idlssdsew234lvkjopeijajbidj'}
+    ])
+});
+
 router.get('/gridSample', (req, res) => {
     // Send an example grid, which is a 16-character string
     res.send('RAMFCEKOTHVUSBAD');

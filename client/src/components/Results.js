@@ -3,32 +3,33 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function Results() {
-    const [players, setPlayers] = useState([]);
+    const [players, setPlayers] = useState([{name: "", words: [""], score: 0}]);
     const [winner, setWinner] = useState();
+    let navigate = useNavigate();
 
     let winnerScore = 0;
 
-    function ready() {
-        axios.post("http://localhost:4000/ready", true)
-        .catch((err) => {
-            console.log("Error showing results" + err.message);
-        });
+    function returnToLobby() {
+        navigate("../");
     }
 
     useLayoutEffect(
         function() {
             axios.get("http://localhost:4000/playerScores")
             .then((res) => {
-                setPlayers(res.data);
+                if(res.data != null) {
+                    setPlayers(res.data);
                 
-               setWinner(res.data[0].name);
-                winnerScore = res.data[0].score;
-                for(let i = 1; i < res.data.length; i++) {
-                    if(res.data[i].score > winnerScore) {
-                        setWinner(res.data[i].name);
-                        winnerScore = res.data[i].score;
+                    setWinner(res.data[0].name);
+                    winnerScore = res.data[0].score;
+                    for(let i = 1; i < res.data.length; i++) {
+                        if(res.data[i].score > winnerScore) {
+                            setWinner(res.data[i].name);
+                            winnerScore = res.data[i].score;
+                        }
                     }
                 }
+                
             })
             .catch((err) => {
                 console.log("Error showing results" + err.message);
@@ -55,7 +56,7 @@ export function Results() {
             <div id="bottom">
                 <h2>Winner</h2>
                 <div id="winner">{winner}</div>
-                <button type="button" id="ready" onClick={ready}>Ready</button>
+                <button type="button" id="RTL" onClick={returnToLobby}>Lobby List</button>
             </div>
         </center>
     );
