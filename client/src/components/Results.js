@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function Results() {
-    const [players, setPlayers] = useState([]);
+    const [players, setPlayers] = useState([{name: "", words: [""], score: 0}]);
     const [winner, setWinner] = useState();
 
     let winnerScore = 0;
@@ -17,22 +17,24 @@ export function Results() {
 
     useLayoutEffect(
         function() {
-            axios.get("http://localhost:4000/playerScores")
-            .then((res) => {
-                setPlayers(res.data);
-                
-               setWinner(res.data[0].name);
-                winnerScore = res.data[0].score;
-                for(let i = 1; i < res.data.length; i++) {
-                    if(res.data[i].score > winnerScore) {
-                        setWinner(res.data[i].name);
-                        winnerScore = res.data[i].score;
+            if(players[0].name != "") {
+                axios.get("http://localhost:4000/playerScoresSample")
+                .then((res) => {
+                    setPlayers(res.data);
+                    
+                setWinner(res.data[0].name);
+                    winnerScore = res.data[0].score;
+                    for(let i = 1; i < res.data.length; i++) {
+                        if(res.data[i].score > winnerScore) {
+                            setWinner(res.data[i].name);
+                            winnerScore = res.data[i].score;
+                        }
                     }
-                }
-            })
-            .catch((err) => {
-                console.log("Error showing results" + err.message);
-            });
+                })
+                .catch((err) => {
+                    console.log("Error showing results" + err.message);
+                });
+            }
         },
         []
     );
