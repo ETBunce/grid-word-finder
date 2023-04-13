@@ -105,26 +105,22 @@ exports.createNewGame = (hostPlayerName) => {
 
     gameId = '';
 
-    const grid = generateGrid();
-
-    let players = [];
-    for (let i = 0; i < playerList.length; i++) {
-        players.push({
-            name:playerList[i],
-            words: [],
-            score: 0
-        })
-    }
+    // const grid = generateGrid();
 
     const newGame = {
-        players:players,
-        grid:grid,
-        startTime: Date.now()
+        players:[],
+        grid:'',
+        startTime: 0,
+        hostPlayerName: hostPlayerName,
+        canJoin: true
     }
+
+    addPlayer(newGame, hostPlayerName);
 
     AppGame.create(newGame)
     .then((game) => {
         console.log('created a game:' + game);
+        myName = hostPlayerName;
         gameId = game._id;
 
         //TEST:
