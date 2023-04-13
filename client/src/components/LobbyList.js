@@ -1,4 +1,4 @@
-export function LobbList() {
+export function LobbyList() {
 
 
     return (
