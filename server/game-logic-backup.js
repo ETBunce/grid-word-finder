@@ -7,7 +7,6 @@ const GRID_HEIGHT = 4;
 const GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
 
 let gameId = '';
-let myName = '';
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -87,21 +86,7 @@ function addScoreEvent(playerName, score) {
     });
 }
 
-function addPlayer(game, playerName) {
-    if (game.players.includes(playerName)) {
-        return false;
-    } else {
-        game.players.push({
-            name: playerName,
-            words: [],
-            score: 0,
-            ready: false
-        });
-        return true;
-    }
-}
-
-exports.createNewGame = (hostPlayerName) => {
+exports.startNewGame = (playerList) => {
 
     gameId = '';
 
@@ -135,27 +120,6 @@ exports.createNewGame = (hostPlayerName) => {
     })
     .catch((err) => {
         console.log('error creating game: ', err);
-    })
-}
-
-exports.startGame = () => {
-
-}
-
-exports.joinGame = (name, joinGameId, resultFunc) => {
-    AppGame.findOne({_id: joinGameId})
-    .then((game) => {
-        const success = addPlayer(game, name);
-        if (success) {
-            gameId = joinGameId;
-            myName = name;
-            resultFunc({success: true});
-        } else {
-            resultFunc({success: false, message: 'player name ' + name + ' is taken'});
-        }
-    })
-    .catch((err) => {
-        resultFunc({success: false, message: 'game does not exist'});
     })
 }
 
