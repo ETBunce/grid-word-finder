@@ -72,17 +72,6 @@ function withGame(func, errorFunc) {
     });
 }
 
-//TODO: Test this function
-function withPlayer(func, errorFunc) {
-    withGame((game) => {
-        const player = game.players.find((player) => player.name === myName);
-        if (player) {
-            func(player);
-        } else {
-            console.log('could not find player: ', myName);
-        }
-    }, errorFunc)
-}
 
 function addScoreEvent(playerName, score) {
     withGame((game) => { // Do this
@@ -131,7 +120,8 @@ exports.createNewGame = (hostPlayerName, resultFunc) => {
         grid:'',
         startTime: 0,
         hostPlayerName: hostPlayerName,
-        canJoin: true
+        canJoin: true,
+        stage: 'Lobby'
     }
 
     AppGame.create(newGame)
@@ -146,10 +136,6 @@ exports.createNewGame = (hostPlayerName, resultFunc) => {
         console.log('error creating game: ', err);
         resultFunc({success: false});
     })
-}
-
-exports.startGame = () => {
-
 }
 
 exports.joinGame = (name, joinGameId, resultFunc) => {
@@ -207,12 +193,32 @@ exports.submitWord = async (req, res) => {
     res.send(responseToPlayer);
 }
 
+// Game starts here if all players are ready
 exports.setReady = (ready, resultFunc) => {
-    withPlayer((player) => {
-        // console.log('setting ready with player: ', myName);
-        player.ready = ready;
+    console.log('gameId:' , gameId);
+    withGame((game) => {
+        if (game.stage != 'Lobby') return;
+        const player = game.players.find((player) => player.name === myName);
+        if (player) {
+            player.ready = ready;
+        }
+        let allReady = true;
+        for (let i = 0; i < game.players.length; i++) {
+            if (!game.players[i].ready) {
+                allReady = false;
+                break;
+            }
+        }
+        if (allReady) {
+            game.stage = 'Starting';
+            setTimeout(()=>{
+                game.stage = 'Playing';
+                game.grid = generateGrid();
+                game.save();
+            }, 3000);
+        }
         resultFunc({success: true, ready: ready});
-    }, err => console.log('error setting ready: ', err));
+    })
 }
 
 exports.getMaxPlayers = () => MAX_PLAYERS;
@@ -232,8 +238,12 @@ exports.requestPlayerScores = (req, res) => {
     })
 }
 
-exports.requestLobbyPlayers = (req, res) => {
+exports.requestLobbyState = (req, res) => {
     withGame((game) => {
-        res.send(game.players);
+        let players = [];
+        for (let i = 0; i < game.players.length; i++) {
+            players.push({name:game.players[i].name, ready: game.players[i].ready});
+        }
+        res.send({stage: game.stage, players: players});
     })
 }

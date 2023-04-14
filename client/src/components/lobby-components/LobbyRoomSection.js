@@ -1,11 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LobbyRoomSection (props) {
 
     const [players, setPlayers] = useState([]);
     const [listIntervalId, setListIntervalId] = useState();
     const [ready, setReady] = useState(false);
+    const [countdown, setCountDown] = useState(-1);
+
+    const navigate = useNavigate();
 
     function PlayerList() {
         let list = [];
@@ -16,6 +20,22 @@ function LobbyRoomSection (props) {
         return list;
     }
 
+    //This is broken, needs to be fixed
+    function BeginStartCountdown() {
+        if (countdown > -1) return;
+        let timer = 3;
+        setCountDown(3);
+        const intervalId = null;
+        setInterval(()=> {
+            console.log('counting down. timer:' , timer);
+            setCountDown(timer);
+            timer--;
+            if (timer == 0) {
+                clearInterval(intervalId);
+                navigate('/game');
+            }
+        }, 1000);
+    }
     
     useEffect(()=>{
 
@@ -26,11 +46,15 @@ function LobbyRoomSection (props) {
             clearInterval(listIntervalId);
         }
         const playerListInterval = setInterval(()=> {
-            console.log('getting list'); 
-            axios.get('http://localhost:4000/lobbyPlayers')
+            console.log('getting lobby state'); 
+            axios.get('http://localhost:4000/lobbyState')
             .then((res) => {
                 // console.log('got result from lobbyPlayers: ' , res.data);
-                setPlayers(res.data);
+                setPlayers(res.data.players);
+                if (res.data.stage === 'Starting') {
+                    clearInterval(listIntervalId);
+                    BeginStartCountdown();
+                }
             })
             .catch(err => console.log('error getting lobby players: ' , err));
         }, 500);

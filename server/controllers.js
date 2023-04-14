@@ -49,15 +49,15 @@ exports.newGame = (req, res) => {
     });
 }
 
-exports.getLobbyPlayers = (req, res) => {
+exports.getLobbyState = (req, res) => {
     // console.log('got request to get lobby players');
-    gameLogic.requestLobbyPlayers(req, res);
+    gameLogic.requestLobbyState(req, res);
 }
 
 exports.setReady = (req, res) => {
     // console.log('got request to set ready: ' , req.body.ready);
     gameLogic.setReady(req.body.ready, (result) => {
-        // console.log('got result: ', result);
+        console.log('got result: ', result);
         res.send(result);
     });
 }

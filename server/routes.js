@@ -10,7 +10,7 @@ router.get('/', (req, res)=> { res.send('Hello , world!'); });
 router.get('/getGrid', controllers.getGrid);
 router.get('/playerScores', controllers.getPlayerScores);
 router.get('/lobbies', controllers.getLobbyList);
-router.get('/lobbyPlayers', controllers.getLobbyPlayers);
+router.get('/lobbyState', controllers.getLobbyState);
 
 router.post('/submitWord', controllers.submitWord);
 router.post('/joinGame', controllers.joinGame);

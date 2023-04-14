@@ -20,7 +20,8 @@ const GameSchema = mongoose.Schema(
         grid: String,
         startTime: Number,
         hostPlayerName: String,
-        canJoin: Boolean
+        canJoin: Boolean,
+        stage: String // Could be equal to Lobby, Starting, Playing, Finished
     }
 );
 
