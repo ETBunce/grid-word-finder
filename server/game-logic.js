@@ -73,11 +73,13 @@ function withGame(func, errorFunc) {
 }
 
 //TODO: Test this function
-function withPlayer(playerName, func, errorFunc) {
+function withPlayer(func, errorFunc) {
     withGame((game) => {
-        const player = game.players.find((name) => name === playerName);
+        const player = game.players.find((player) => player.name === myName);
         if (player) {
             func(player);
+        } else {
+            console.log('could not find player: ', myName);
         }
     }, errorFunc)
 }
@@ -92,17 +94,30 @@ function addScoreEvent(playerName, score) {
 }
 
 function addPlayer(game, playerName) {
-    if (game.players.includes(playerName)) {
+
+    if (!game.canJoin) {
         return false;
-    } else {
-        game.players.push({
-            name: playerName,
-            words: [],
-            score: 0,
-            ready: false
-        });
-        return true;
     }
+
+    for (let i = 0; i < game.players.length; i++) {
+        if (game.players[i].name === playerName) {
+            return false;
+        }
+    }
+
+    game.players.push({
+        name: playerName,
+        words: [],
+        score: 0,
+        ready: false
+    });
+
+    if (game.players.length >= MAX_PLAYERS) {
+        game.canJoin = false;
+    }
+
+    game.save();
+    return true;
 }
 
 exports.createNewGame = (hostPlayerName, resultFunc) => {
@@ -119,13 +134,12 @@ exports.createNewGame = (hostPlayerName, resultFunc) => {
         canJoin: true
     }
 
-    addPlayer(newGame, hostPlayerName);
-
     AppGame.create(newGame)
     .then((game) => {
         console.log('created a game:' + game);
         myName = hostPlayerName;
         gameId = game._id;
+        addPlayer(game, hostPlayerName);
         resultFunc({success: true, gameId: gameId});
     })
     .catch((err) => {
@@ -193,16 +207,32 @@ exports.submitWord = async (req, res) => {
     res.send(responseToPlayer);
 }
 
+exports.setReady = (ready, resultFunc) => {
+    withPlayer((player) => {
+        // console.log('setting ready with player: ', myName);
+        player.ready = ready;
+        resultFunc({success: true, ready: ready});
+    }, err => console.log('error setting ready: ', err));
+}
+
+exports.getMaxPlayers = () => MAX_PLAYERS;
+exports.getMinPlayers = () => MIN_PLAYERS;
 
 // CONTROLLER INTERFACE
 
 exports.requestGameGrid = (req, res) => {
     withGame((game) => {
-        res.send(game.grid);
+        res.send(game.grid); 
     });
 }
 
 exports.requestPlayerScores = (req, res) => {
+    withGame((game) => {
+        res.send(game.players);
+    })
+}
+
+exports.requestLobbyPlayers = (req, res) => {
     withGame((game) => {
         res.send(game.players);
     })

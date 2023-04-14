@@ -9,12 +9,14 @@ router.get("/game", controllers.getGrid);
 router.get('/', (req, res)=> { res.send('Hello , world!'); });
 router.get('/getGrid', controllers.getGrid);
 router.get('/playerScores', controllers.getPlayerScores);
+router.get('/lobbies', controllers.getLobbyList);
+router.get('/lobbyPlayers', controllers.getLobbyPlayers);
 
 router.post('/submitWord', controllers.submitWord);
-
-router.get('/lobbies', controllers.getLobbyList);
 router.post('/joinGame', controllers.joinGame);
 router.post('/newGame', controllers.newGame);
+router.post('/setReady', controllers.setReady);
+
 /*
 example result for get /playerScores:
 [ // An array of players
