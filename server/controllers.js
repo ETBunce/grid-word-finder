@@ -41,3 +41,10 @@ exports.joinGame = (req, res) => {
         res.send(result);
     })
 }
+
+exports.newGame = (req, res) => {
+    console.log('new game requested');
+    gameLogic.createNewGame(req.body.playerName, (result) => {
+        res.send(result);
+    });
+}

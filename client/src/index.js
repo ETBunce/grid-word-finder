@@ -5,17 +5,15 @@ import "./index.css";
 import axios from "axios";
 import GridGame from './components/GridGame';
 import Results from './components/Results';
-import Lobby from './components/Lobby';
-import LobbyList from './components/LobbyList';
+import LobbyScreen from './components/LobbyScreen';
 
 function App(){
     axios.defaults.withCredentials = true;
   
     return (
         <Routes>
-            <Route exact path="/" element={<LobbyList />} />
+            <Route exact path="/" element={<LobbyScreen />} />
             <Route path="/results" element={<Results />} />
-            <Route path="/lobby" element={<Lobby />} />
             <Route path="/game" element={<GridGame />}/>
         </Routes>
     );

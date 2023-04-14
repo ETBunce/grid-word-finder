@@ -14,6 +14,7 @@ router.post('/submitWord', controllers.submitWord);
 
 router.get('/lobbies', controllers.getLobbyList);
 router.post('/joinGame', controllers.joinGame);
+router.post('/newGame', controllers.newGame);
 /*
 example result for get /playerScores:
 [ // An array of players

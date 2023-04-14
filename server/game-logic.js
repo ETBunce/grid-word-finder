@@ -7,6 +7,8 @@ const CONSONANTS = 'BCDFGHJKLMNPQRSTVWXYZ';
 const GRID_WIDTH = 4;
 const GRID_HEIGHT = 4;
 const GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
+const MAX_PLAYERS = 4;
+const MIN_PLAYERS = 1; // TODO: Change this to 2 when done testing
 
 let gameId = '';
 let myName = '';
@@ -103,7 +105,7 @@ function addPlayer(game, playerName) {
     }
 }
 
-exports.createNewGame = (hostPlayerName) => {
+exports.createNewGame = (hostPlayerName, resultFunc) => {
 
     gameId = '';
 
@@ -124,15 +126,11 @@ exports.createNewGame = (hostPlayerName) => {
         console.log('created a game:' + game);
         myName = hostPlayerName;
         gameId = game._id;
-
-        //TEST:
-        withGame((game)=> {
-            console.log('doing a thing with game: ', game._id);
-        })
-        ///////////////
+        resultFunc({success: true, gameId: gameId});
     })
     .catch((err) => {
         console.log('error creating game: ', err);
+        resultFunc({success: false});
     })
 }
 
@@ -143,17 +141,21 @@ exports.startGame = () => {
 exports.joinGame = (name, joinGameId, resultFunc) => {
     AppGame.findOne({_id: joinGameId})
     .then((game) => {
+        if (game.players.length >= MAX_PLAYERS) { // can only join if there is room in the lobby
+            resultFunc({success: false, message: 'lobby is full', lobbyFull: true});
+            return;
+        }
         const success = addPlayer(game, name);
         if (success) {
             gameId = joinGameId;
             myName = name;
             resultFunc({success: true});
         } else {
-            resultFunc({success: false, message: 'player name ' + name + ' is taken'});
+            resultFunc({success: false, message: 'player name ' + name + ' is taken', nameTaken: true});
         }
     })
     .catch((err) => {
-        resultFunc({success: false, message: 'game does not exist'});
+        resultFunc({success: false, message: 'game does not exist', noGame: true});
     })
 }
 
