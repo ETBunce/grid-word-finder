@@ -1,5 +1,6 @@
 const AppGame = require('./models/game');
 const axios = require('axios');
+const fs = require("fs");
 
 
 const VOWELS = 'AEIOU';
@@ -12,6 +13,20 @@ const MIN_PLAYERS = 1; // TODO: Change this to 2 when done testing
 
 let gameId = '';
 let myName = '';
+
+// PULLS IN LIST OF VALID WORDS INTO MEMORY
+let validWords;
+
+fs.readFile("assets/words.txt", "utf-8", function(err, data) {
+    if (err) { console.log("Error reading file: %s", err); }
+    else {
+        validWords = data.split('\n');
+        for (let i = 0; i < validWords.length; i++) {
+            validWords[i] = validWords[i].replace("\r", "").replace("\n", "");
+        }
+        console.log("Successfully pulled in %s valid words (assets/words.txt) file.", validWords.length);
+    }
+})
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -164,44 +179,36 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
     })
 }
 
-exports.submitWord = async (req, res) => {
+exports.submitWord = (req, res) => {
     const guessedWord = req.body.word;
-    console.log("Player sent word: \"%s\"", guessedWord);
+
     let responseToPlayer = {
         success: false,
-        err: "Unknown Error Occurred"
+        validWord: false
     };
 
-    await axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/" + guessedWord)
-        .then((res) => {
-            console.log("Response from datamsue: %s", JSON.stringify(res.data));
-            responseToPlayer = {
-                success: true,
-                validWord: true
-            };
-        })
-        .catch((err) => {
-            if (err.response.data.title === "No Definitions Found") {
-                console.log("Word is invalid");
-                responseToPlayer = {
-                    success: true,
-                    validWord: false
-                };
-            } else {
-                console.log("Error sending request to datamuse. Error: %s", err.message);
-                responseToPlayer = {
-                    success: false,
-                    err: "Please check server console for error!"
-                };
-            }
-        })
+    if (
+        guessedWord.length > 2
+        && validWords.includes(guessedWord.toLowerCase()) // check in-mem valid words file
+    ) {
+        responseToPlayer.success = true;
+        responseToPlayer.validWord = true;
+        console.log("Player sent word: \"%s\" which is a valid word", guessedWord);
+
+        // add to player's score, etc.
+    } else {
+        console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
+        responseToPlayer.success = true;
+        responseToPlayer.validWord = false;
+    }
+
     res.send(responseToPlayer);
 }
 
 // Game starts here if all players are ready
 exports.setReady = (ready, resultFunc) => {
     withGame((game) => {
-        if (game.stage != 'Lobby') return;
+        if (game.stage !== 'Lobby') return;
         const player = game.players.find((player) => player.name === myName);
         if (player) {
             player.ready = ready;
