@@ -19,7 +19,8 @@ function PlayerNameSection(props) {
             .then((res) => {
                 console.log('got a response from joinGame: ', res.data);
                 if (res.data.success) {
-                    props.goTo('LobbyRoom', );
+                    console.log('going to lobby room. host name is ' , res.data.hostPlayerName);
+                    props.goTo('LobbyRoom', {hostName: res.data.hostPlayerName} );
                 } else if (res.data.nameTaken) {
                     console.log('name is taken');
                     setShowNameTakenHint(true);
@@ -42,7 +43,7 @@ function PlayerNameSection(props) {
             axios.post('http://localhost:4000/newGame', {playerName:playerName})
             .then((res) => {
                 console.log('got a response from post to newGame: ', res);
-                props.goTo('LobbyRoom');
+                props.goTo('LobbyRoom', {hostName: playerName});
             })
             .catch((err) => {
                 console.log('error creating new game: ' , err);

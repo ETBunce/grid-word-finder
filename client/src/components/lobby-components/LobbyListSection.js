@@ -28,11 +28,9 @@ function LobbyListSection(props) {
     }
 
     function LobbyEntryList() {
-        console.log('rendering lobby list: ', lobbyList);
         const result = lobbyList.map((item) => {
             return <LobbyEntry key={item.gameId} name={item.name} gameId={item.gameId}/>
         });
-        console.log('rendering' , result);
         return (result);
     }
 

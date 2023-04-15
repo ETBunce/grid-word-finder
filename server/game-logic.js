@@ -61,15 +61,20 @@ function generateGrid() {
 //TODO: Test this function
 // 
 function withGame(func, errorFunc) {
+    if (gameId === '') {
+        console.log('withGame: current gameId is blank.');
+        return false;
+    }
     AppGame.findOne({_id:gameId})
     .then((game) => {
         func(game);
         game.save();
     })
     .catch((err) => {
-        console.log('error finding game: ' + err.message);
+        console.log('error working with game: ' + err.message);
         errorFunc && errorFunc(err);
     });
+    return true; // Indicates the current game id has been set
 }
 
 
@@ -149,7 +154,7 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
         if (success) {
             gameId = joinGameId;
             myName = name;
-            resultFunc({success: true});
+            resultFunc({success: true, hostPlayerName: game.hostPlayerName});
         } else {
             resultFunc({success: false, message: 'player name ' + name + ' is taken', nameTaken: true});
         }
@@ -195,7 +200,6 @@ exports.submitWord = async (req, res) => {
 
 // Game starts here if all players are ready
 exports.setReady = (ready, resultFunc) => {
-    console.log('gameId:' , gameId);
     withGame((game) => {
         if (game.stage != 'Lobby') return;
         const player = game.players.find((player) => player.name === myName);
