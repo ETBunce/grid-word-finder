@@ -7,14 +7,20 @@ function LobbyListSection(props) {
     const [lobbyList, setLobbyList] = useState([]);
 
     useEffect(()=> {
-        axios.get('http://localhost:4000/lobbies')
-        .then((res) => {
-            console.log('got the lobby list: ', res.data);
-            setLobbyList(res.data);
-        })
-        .catch((err) => {
-            console.log('error getting lobby list: ', err.message);
-        })
+        const lobbyListInterval = setInterval(() => {
+            axios.get('http://localhost:4000/lobbies')
+            .then((res) => {
+                // console.log('got the lobby list: ', res.data);
+                setLobbyList(res.data);
+            })
+            .catch((err) => {
+                console.log('error getting lobby list: ', err.message);
+            })
+        }, 500);
+
+        return(()=>{
+            clearInterval(lobbyListInterval);
+        });
     }, [])
 
     function LobbyEntry(entryProps) {

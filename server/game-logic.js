@@ -131,7 +131,7 @@ exports.createNewGame = (hostPlayerName, resultFunc) => {
 
     AppGame.create(newGame)
     .then((game) => {
-        console.log('created a game:' + game);
+        console.log('created a game');
         myName = hostPlayerName;
         gameId = game._id;
         addPlayer(game, hostPlayerName);

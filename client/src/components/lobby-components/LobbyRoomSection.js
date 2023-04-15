@@ -32,7 +32,7 @@ function LobbyRoomSection (props) {
 
         gameStartCountDownInterval.current = setInterval(()=> {
             setCountDown(--thisCount);
-            console.log('this count is', thisCount);
+            // console.log('this count is', thisCount);
             if (thisCount == 0) {
                 navigate('/game');
             }
@@ -45,13 +45,8 @@ function LobbyRoomSection (props) {
     useEffect(()=>{
 
         //Refresh the player list on an interval
-        console.log('starting interval to check lobby players');
-        // if (listIntervalId) {
-        //     console.log('clearing interval');
-        //     clearInterval(listIntervalId);
-        // }
         const playerListInterval = setInterval(()=> {
-            console.log('getting lobby state'); 
+            // console.log('getting lobby state'); 
             axios.get('http://localhost:4000/lobbyState')
             .then((res) => {
                 // console.log('got result from lobbyPlayers: ' , res.data);
@@ -63,21 +58,20 @@ function LobbyRoomSection (props) {
             })
             .catch(err => console.log('error getting lobby players: ' , err));
         }, 500);
-        // setListIntervalId(playerListInterval);
 
         return(()=> {
             clearInterval(playerListInterval);
             if (gameStartCountDownInterval.current) {
-                console.log('clearing game start count down interval');
+                // console.log('clearing game start count down interval');
                 clearInterval(gameStartCountDownInterval.current);
             }
-        })
+        });
     }, []);
 
     function toggleReady() {
         axios.post('http://localhost:4000/setReady', {ready: !ready})
         .then((res) => {
-            console.log('got response from post to setReady: ', res.data);
+            // console.log('got response from post to setReady: ', res.data);
             setReady(res.data.ready);
         })
         .catch(err => console.log('error posting to setReady: ', err.message));
@@ -87,9 +81,14 @@ function LobbyRoomSection (props) {
         <center>
             <h1>{props.options.hostName + "'s game"}</h1>
             <PlayerList/>
-            <button onClick={toggleReady}>{ready ? 'Unready' : 'ready'}</button>
-            {countdown > 0 ? <div>Game starting in: {countdown}</div> : null}
-            <button onClick={()=>{ props.goTo('LobbyList');}}>Leave</button>
+            {countdown > 0 ? 
+                <div>
+                    Game starting in: {countdown}
+                </div>
+                : <div>
+                    <button onClick={toggleReady}>{ready ? 'Unready' : 'ready'}</button>
+                    <button onClick={()=>{ props.goTo('LobbyList');}}>Leave</button>
+                </div>}
         </center>
     );
 }
