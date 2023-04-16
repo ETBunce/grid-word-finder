@@ -14,19 +14,23 @@ const MIN_PLAYERS = 1; // TODO: Change this to 2 when done testing
 let gameId = '';
 let myName = '';
 
-// PULLS IN LIST OF VALID WORDS INTO MEMORY
-let validWords;
+let validWordsFile;
+let currentGameGrid = "RAMFCEKOTHVUSBAD";
+let currentWordsGuessed = [];
+let currentScore = 0;
 
 fs.readFile("assets/words.txt", "utf-8", function(err, data) {
     if (err) { console.log("Error reading file: %s", err); }
     else {
-        validWords = data.split('\n');
-        for (let i = 0; i < validWords.length; i++) {
-            validWords[i] = validWords[i].replace("\r", "").replace("\n", "");
+        validWordsFile = data.split('\n');
+        for (let i = 0; i < validWordsFile.length; i++) {
+            validWordsFile[i] = validWordsFile[i].replace("\r", "").replace("\n", "");
         }
-        console.log("Successfully pulled in %s valid words (assets/words.txt) file.", validWords.length);
+        console.log("Successfully pulled in %s valid words (assets/words.txt) file.", validWordsFile.length);
     }
 })
+
+// TODO - DELETE ALL GAMES IN DB THAT ARE EXPIRED
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -181,28 +185,89 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
 
 exports.submitWord = (req, res) => {
     const guessedWord = req.body.word;
+    const validWordScoreMatrix = [1, 2, 4, 7, 11, 16];
 
     let responseToPlayer = {
         success: false,
-        validWord: false
+        validWord: false,
+        player2Score: NaN,
+        player3Score: NaN,
+        player4Score: NaN,
+        earnedPoints: 0
     };
 
     if (
         guessedWord.length > 2
-        && validWords.includes(guessedWord.toLowerCase()) // check in-mem valid words file
+        && validWordsFile.includes(guessedWord.toLowerCase()) // check in-mem valid words file
+        && validateWord(guessedWord)
     ) {
+        let earnedScore = guessedWord.length > 8 ? 22 : validWordScoreMatrix[guessedWord.length - 3];
+        currentScore += earnedScore;
+        currentWordsGuessed.push(guessedWord);
+        console.log("Player sent word: \"%s\" which is a valid word and earned %s points. New player score: %s", guessedWord, earnedScore, currentScore);
+
         responseToPlayer.success = true;
         responseToPlayer.validWord = true;
-        console.log("Player sent word: \"%s\" which is a valid word", guessedWord);
-
-        // add to player's score, etc.
+        responseToPlayer.earnedPoints = earnedScore;
+        // TODO - add to player's score to DB, etc.
     } else {
         console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
         responseToPlayer.success = true;
         responseToPlayer.validWord = false;
     }
 
+    // TODO - GET OTHER PLAYER'S SCORES
+    responseToPlayer.playerGuessedWords = currentWordsGuessed;
+    responseToPlayer.thisPlayerScore = currentScore;
+
     res.send(responseToPlayer);
+}
+
+
+function validateWord(wordToValidate) {
+    let currInx = currentGameGrid.indexOf(wordToValidate[0]);
+    while (currInx >= 0) {
+        if (traverseWord(currInx, 0, wordToValidate)) break;
+        currInx = currentGameGrid.indexOf(wordToValidate[0], currInx + 1);
+    }
+
+    return currInx >= 0;
+}
+
+function traverseWord(currItr, currLetterItr, wordToCheck, visitedStates=[]) {
+    let newVisitedStates = visitedStates.slice();
+    if (newVisitedStates.includes(currItr)) return false;
+    newVisitedStates.push(currItr);
+    if (wordToCheck[currLetterItr].toUpperCase() === currentGameGrid[currItr].toUpperCase()) {
+        if (++currLetterItr === wordToCheck.length) return true;
+    } else return false;
+
+    // traverse using recursion
+    // right
+    if (((currItr + 1) % 4) > 0 && traverseWord(currItr + 1, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // left
+    else if (((currItr % 4) - 1) >= 0  && traverseWord(currItr - 1, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // up
+    else if ((currItr - 4) >= 0 && traverseWord(currItr - 4, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // down
+    else if ((currItr + 4) < 16 && traverseWord(currItr + 4, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // upper-right
+    else if ((currItr - 4) >= 0 && (currItr - 3) % 4 > 0 && traverseWord(currItr - 3, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // upper-left
+    else if ((currItr - 4) >= 0 && ((currItr  - 4) % 4) - 1 >= 0 && traverseWord(currItr - 5, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // lower-right
+    else if ((currItr + 4) < 16 && ((currItr + 5) % 4) - 1 >= 0 && traverseWord(currItr + 5, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    // lower-left
+    else if ((currItr + 4) < 16 && ((currItr + 4) % 4) - 1 >= 0 && traverseWord(currItr + 3, currLetterItr, wordToCheck, newVisitedStates)) return true;
+
+    else return false;
 }
 
 // Game starts here if all players are ready
@@ -221,6 +286,9 @@ exports.setReady = (ready, resultFunc) => {
             }
         }
         if (allReady) {
+            currentGameGrid = generateGrid();
+            currentWordsGuessed = [];
+            currentScore = 0;
             game.stage = 'Starting';
             setTimeout(()=>{
                 game.stage = 'Playing';

@@ -50,12 +50,12 @@ exports.newGame = (req, res) => {
 }
 
 exports.getLobbyState = (req, res) => {
-    // console.log('got request to get lobby players');
+    console.log('got request to get lobby players');
     gameLogic.requestLobbyState(req, res);
 }
 
 exports.setReady = (req, res) => {
-    // console.log('got request to set ready: ' , req.body.ready);
+    console.log('got request to set ready: ' , req.body.ready);
     gameLogic.setReady(req.body.ready, (result) => {
         console.log('got result: ', result);
         res.send(result);
