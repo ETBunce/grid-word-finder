@@ -17,7 +17,7 @@ export function GridGame() {
         // axios.get("http://localhost:4000/game") - Use this line when no longer testing - Ethan
         .then((res) => {
             setBoard(res.data);
-            // next will need to set the players and player scores
+            // TODO: set the players and player scores
         })
         .catch(err => console.log(err));
     }, []);
@@ -127,27 +127,25 @@ export function GridGame() {
         e.preventDefault();
         if(!wordList.includes(word)){
             // post method to submit word
-
-            // then if word is confirmed a real word
-            // increase player score
-            let pointsGained = increaseScore();
-            setPlayerScore(playerScore + pointsGained);
-            // add word to the display list
-            setWordList([...wordList, word]);
-            setStatus("Word found! " + pointsGained + " points added!");
+            axios.post("http://localhost:4000/submitWord", {word: word})
+            .then((res) => {
+                if(res.data.validWord){
+                    // increase player score
+                    setPlayerScore(playerScore + res.data.pointsGained);
+                    // add word to the display list
+                    setWordList([...wordList, word]);
+                    setStatus("Word found! " + res.data.pointsGained + " points added!");
+                } else {
+                    setStatus("Not a real word!");
+                }
+            })
+            .catch((err) => {
+                console.log("Error couldn't send word.");
+                console.log(err.message);
+            });
         } else{
             setStatus("Word already used!");
         }
-    }
-
-    function increaseScore(){
-        if(word.length === 3){return 1;}
-        else if (word.length === 4){return 2;}
-        else if (word.length === 5){return 4;}
-        else if (word.length === 6){return 7;}
-        else if (word.length === 7){return 11;}
-        else if (word.length === 8){return 16;}
-        else if (word.length > 8){return 22;}
     }
 
     useEffect(() => {
@@ -212,12 +210,12 @@ export function GridGame() {
                             Submit word
                         </button>
                     </form><br /> <br />
-                    {wordErrorFound ? <p>{wordError}</p> : null}<br />
-                    <p>{status}</p>
+                    {wordErrorFound ? <p>{wordError}</p> : null}
                 </div>
                 <div className="col-md-4">
                     <h2>Your words</h2>
-                    <p>{wordListString}</p>
+                    <p>{wordListString}</p><br /> <br />
+                    <p>{status}</p>
                 </div>
             </div>
         </center>
