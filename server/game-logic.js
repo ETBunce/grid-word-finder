@@ -184,7 +184,8 @@ exports.submitWord = (req, res) => {
 
     let responseToPlayer = {
         success: false,
-        validWord: false
+        validWord: false,
+        pointsGained: 0
     };
 
     if (
@@ -196,6 +197,10 @@ exports.submitWord = (req, res) => {
         console.log("Player sent word: \"%s\" which is a valid word", guessedWord);
 
         // add to player's score, etc.
+        // calculate points gained from the word
+        responseToPlayer.pointsGained = increaseScore(guessedWord.length);
+
+        // TODO: add points gained to player's total score
     } else {
         console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
         responseToPlayer.success = true;
@@ -203,6 +208,16 @@ exports.submitWord = (req, res) => {
     }
 
     res.send(responseToPlayer);
+}
+
+function increaseScore(length){
+    if(length === 3){return 1;}
+    else if (length === 4){return 2;}
+    else if (length === 5){return 4;}
+    else if (length === 6){return 7;}
+    else if (length === 7){return 11;}
+    else if (length === 8){return 16;}
+    else if (length > 8){return 22;}
 }
 
 // Game starts here if all players are ready
