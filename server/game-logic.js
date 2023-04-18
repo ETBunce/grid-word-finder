@@ -1,5 +1,4 @@
 const AppGame = require('./models/game');
-const axios = require('axios');
 const fs = require("fs");
 
 
@@ -15,7 +14,7 @@ let gameId = '';
 let myName = '';
 
 let validWordsFile;
-let currentGameGrid = "RAMFCEKOTHVUSBAD";  // change this when not testing
+let currentGameGrid = "RAMFCEKOTHVUSBAD";  // change this when not testing... or not, I'm not your parent.
 let currentWordsGuessed = [];
 let currentScore = 0;
 
@@ -210,6 +209,7 @@ exports.submitWord = (req, res) => {
     let responseToPlayer = {
         success: false,
         validWord: false,
+        player1Score: NaN,
         player2Score: NaN,
         player3Score: NaN,
         player4Score: NaN,
@@ -220,6 +220,7 @@ exports.submitWord = (req, res) => {
         guessedWord.length > 2
         && validWordsFile.includes(guessedWord.toLowerCase()) // check in-mem valid words file
         && validateWord(guessedWord)
+        && !currentWordsGuessed.includes(guessedWord)
     ) {
         let earnedScore = guessedWord.length > 8 ? 22 : validWordScoreMatrix[guessedWord.length - 3];
         currentScore += earnedScore;
@@ -229,16 +230,29 @@ exports.submitWord = (req, res) => {
         responseToPlayer.success = true;
         responseToPlayer.validWord = true;
         responseToPlayer.earnedPoints = earnedScore;
-        // TODO - add to player's score to DB, etc.
+
+        withGame((game) => {
+            for (let i = 0; i < game.players.length; i++) {
+                if (game.players[i] === myName) {
+                    game.players[i].score = currentScore;
+                    game.players[i].words = currentWordsGuessed;
+                } else {
+                    switch (i) {
+                        case 0: responseToPlayer.player1Score = game.players[i].score; break;
+                        case 1: responseToPlayer.player2Score = game.players[i].score; break;
+                        case 2: responseToPlayer.player3Score = game.players[i].score; break;
+                        case 3: responseToPlayer.player4Score = game.players[i].score; break;
+                    }
+                }
+            }
+            game.save();
+        })
     } else {
         console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
         responseToPlayer.success = true;
         responseToPlayer.validWord = false;
     }
-
-    // TODO - GET OTHER PLAYER'S SCORES
     responseToPlayer.playerGuessedWords = currentWordsGuessed;
-    responseToPlayer.thisPlayerScore = currentScore;
 
     res.send(responseToPlayer);
 }
