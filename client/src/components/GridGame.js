@@ -31,6 +31,26 @@ export function GridGame() {
     }, []);
 
     // TODO: PUT TIMER CODE HERE
+    useEffect(()=> {
+        const gameDataInterval = setInterval(() => {
+
+            // Here's an example of what you might do
+            // axios.get('http://localhost:4000/gameData')
+            // .then((res) => {
+            //     // update the game data here
+            //     console.log('updating the game');
+            // })
+            // .catch((err) => {
+            //     console.log('error getting game data: ', err.message);
+            // })
+
+
+        }, 500);
+
+        return(()=>{
+            clearInterval(gameDataInterval);
+        });
+    }, [])
 
     // onclick function for buttons change what is in the form
     function handleClick(e) {
