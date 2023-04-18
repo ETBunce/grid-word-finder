@@ -32,10 +32,10 @@ export function GridGame() {
             // set the players
             setPlayerName(res.data.players[0].name);
             setPlayer2Name(res.data.players[1].name);
-            if(players.length > 2){
+            if(res.data.players.length > 2){
                 setPlayer3Name(res.data.players[2].name);
             }
-            if(players.length > 3){
+            if(res.data.players.length > 3){
                 setPlayer4Name(res.data.players[3].name);
             }
         })
@@ -50,9 +50,12 @@ export function GridGame() {
                 // update the game data here
                 setPlayerScore(res.data[0].score);
                 setPlayer2Score(res.data[1].score);
-                setPlayer3Score(res.data[2].score);
-                setPlayer4Score(res.data[3].score);
-                console.log('updating the game');
+                if(res.data.length > 2){
+                    setPlayer3Score(res.data[2].score);
+                }
+                if(res.data.length > 3){
+                    setPlayer4Score(res.data[3].score);
+                }
             })
             .catch((err) => {
                 console.log('error getting game data: ', err.message);
