@@ -7,7 +7,7 @@ html, body {
 
 #main-content {
     background: rgb(255, 255, 255); /* Fallback for older browsers without RGBA-support */
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.9);
     padding-top: 1%;
     padding-bottom: 1%;
     border-radius: 5px;
