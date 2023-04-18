@@ -58,6 +58,8 @@ function updateLobby(game) {
         game.stage = 'Starting';
         setTimeout(()=>{
             startGame(game);
+            console.log('game was started, grid is' , game.grid);
+            game.save();
         }, 3000);
         return true;
     }

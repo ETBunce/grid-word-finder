@@ -27,6 +27,7 @@ export function GridGame() {
     useEffect(() => {
         axios.get("http://localhost:4000/getGame")
         .then((res) => {
+            console.log(res.data);
             // set the grid
             setBoard(res.data.grid);
             // set the players
