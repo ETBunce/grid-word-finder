@@ -30,10 +30,14 @@ export function GridGame() {
             // set the grid
             setBoard(res.data.grid);
             // set the players
-            setPlayerName(res.data.playerName);
-            setPlayer2Name(res.data.player2Name);
-            setPlayer3Name(res.data.player3Name);
-            setPlayer4Name(res.data.player4Name);
+            setPlayerName(res.data.players[0].name);
+            setPlayer2Name(res.data.players[1].name);
+            if(players.length > 2){
+                setPlayer3Name(res.data.players[2].name);
+            }
+            if(players.length > 3){
+                setPlayer4Name(res.data.players[3].name);
+            }
         })
         .catch(err => console.log(err));
     }, []);
@@ -41,18 +45,18 @@ export function GridGame() {
     // TODO: PUT TIMER CODE HERE
     useEffect(()=> {
         const gameDataInterval = setInterval(() => {
-            // axios.get('http://localhost:4000/playerScores')
-            // .then((res) => {
-            //     // update the game data here
-            //     // setPlayerScore(res.data.playerScore);
-            //     // setPlayer2Score(res.data.player2Score);
-            //     // setPlayer3Score(res.data.player3Score);
-            //     // setPlayer4Score(res.data.player4Score);
-            //     console.log('updating the game');
-            // })
-            // .catch((err) => {
-            //     console.log('error getting game data: ', err.message);
-            // })
+            axios.get('http://localhost:4000/playerScores')
+            .then((res) => {
+                // update the game data here
+                setPlayerScore(res.data[0].score);
+                setPlayer2Score(res.data[1].score);
+                setPlayer3Score(res.data[2].score);
+                setPlayer4Score(res.data[3].score);
+                console.log('updating the game');
+            })
+            .catch((err) => {
+                console.log('error getting game data: ', err.message);
+            })
         }, 500);
 
         let timer = 60;
