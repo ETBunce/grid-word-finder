@@ -1,7 +1,7 @@
 const gameLogic = require('./game-logic');
 const AppGame = require('./models/game');
 
-exports.getGrid = (req, res)=> {
+exports.getGame = (req, res)=> {
     gameLogic.requestGameGrid(req, res);
 }
 

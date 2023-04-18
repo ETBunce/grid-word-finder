@@ -25,15 +25,15 @@ export function GridGame() {
 
     // get function gets game board, players
     useEffect(() => {
-        axios.get("http://localhost:4000/gridSample")
-        // axios.get("http://localhost:4000/getGrid") - Use this line when no longer testing - Ethan
+        axios.get("http://localhost:4000/getGame")
         .then((res) => {
-            setBoard(res.data);
+            // set the grid
+            setBoard(res.data.grid);
             // set the players
-            // setPlayerName(res.data.playerName);
-            // setPlayer2Name(res.data.player2Name);
-            // setPlayer3Name(res.data.player3Name);
-            // setPlayer4Name(res.data.player4Name);
+            setPlayerName(res.data.playerName);
+            setPlayer2Name(res.data.player2Name);
+            setPlayer3Name(res.data.player3Name);
+            setPlayer4Name(res.data.player4Name);
         })
         .catch(err => console.log(err));
     }, []);
@@ -241,6 +241,9 @@ export function GridGame() {
                         <button onClick={() => handleClick(15)}>{board[15]}</button>
                     </div><br />
                     <button onClick={() => undoClick()}>Undo</button><br /><br />
+                    <div>
+                        Time remaining: {gameTimer}
+                    </div>
                 </div>
                 <div className="col-md-4">
                     <form onSubmit={handleSubmit} noValidate>
@@ -261,9 +264,6 @@ export function GridGame() {
                     <h2>Your words</h2>
                     <p>{wordListString}</p><br /> <br />
                     <p>{status}</p>
-                </div>
-                <div>
-                    Time remaining: {gameTimer}
                 </div>
             </div>
         </center>

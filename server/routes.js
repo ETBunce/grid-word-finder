@@ -4,10 +4,8 @@ const router = express.Router();
 
 const controllers = require("./controllers.js");
 
-router.get("/game", controllers.getGrid);
-
 router.get('/', (req, res)=> { res.send('Hello , world!'); });
-router.get('/getGrid', controllers.getGrid);
+router.get('/getGame', controllers.getGame);
 router.get('/playerScores', controllers.getPlayerScores);
 router.get('/lobbies', controllers.getLobbyList);
 router.get('/lobbyState', controllers.getLobbyState);
