@@ -87,7 +87,17 @@ function LobbyRoomSection (props) {
                 </div>
                 : <div>
                     <button onClick={toggleReady}>{ready ? 'Unready' : 'ready'}</button>
-                    <button onClick={()=>{ props.goTo('LobbyList');}}>Leave</button>
+                    <button onClick={()=>{
+
+                        axios.post('http://localhost:4000/leaveGame')
+                            .then((res)=> {
+                                console.log('left the game');
+                            })
+                            .catch(err => console.log('error leaving game'));
+
+                        props.goTo('LobbyList');
+                        
+                        }}>Leave</button>
                 </div>}
         </center>
     );

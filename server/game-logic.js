@@ -36,6 +36,31 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
+function startGame(game) {
+    game.stage = 'Playing';
+    game.grid = generateGrid();
+    game.startTime = Date.now();
+}
+
+function checkAllReady(game) {
+    let allReady = true;
+    for (let i = 0; i < game.players.length; i++) {
+        if (!game.players[i].ready) {
+            allReady = false;
+            break;
+        }
+    }
+    if (allReady) {
+        game.canJoin = false;
+        game.stage = 'Starting';
+        setTimeout(()=>{
+            startGame(game);
+        }, 3000);
+        return true;
+    }
+    return false;
+}
+
 
 function generateGrid() {
 
@@ -273,21 +298,7 @@ exports.setReady = (ready, resultFunc) => {
         if (player) {
             player.ready = ready;
         }
-        let allReady = true;
-        for (let i = 0; i < game.players.length; i++) {
-            if (!game.players[i].ready) {
-                allReady = false;
-                break;
-            }
-        }
-        if (allReady) {
-            game.stage = 'Starting';
-            setTimeout(()=>{
-                game.stage = 'Playing';
-                game.grid = generateGrid();
-                game.save();
-            }, 3000);
-        }
+        checkAllReady(game);
         resultFunc({success: true, ready: ready});
     })
 
@@ -297,6 +308,21 @@ exports.setReady = (ready, resultFunc) => {
     withGame((game) => {
         currentGameGrid = game.grid;
     })
+}
+
+exports.leaveGame = (resultFunc) => {
+    console.log('leaving game: ', myName);
+    withGame((game) => {
+        for (let i = 0; i < game.players.length; i++) {
+            if (game.players[i].name == myName) {
+                game.players.splice(i,1);
+            }
+        }
+        if(checkAllReady(game) && game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {
+            game.canJoin = true;
+        }
+        resultFunc();
+    });
 }
 
 exports.getMaxPlayers = () => MAX_PLAYERS;

@@ -16,6 +16,7 @@ router.post('/submitWord', controllers.submitWord);
 router.post('/joinGame', controllers.joinGame);
 router.post('/newGame', controllers.newGame);
 router.post('/setReady', controllers.setReady);
+router.post('/leaveGame', controllers.leaveGame);
 
 /*
 example result for get /playerScores:
