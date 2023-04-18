@@ -25,27 +25,30 @@ export function GridGame() {
         .then((res) => {
             setBoard(res.data);
             // TODO: set the players
-            
+            // setPlayerName(res.data.playerName);
+            // setPlayer2Name(res.data.player2Name);
+            // setPlayer3Name(res.data.player3Name);
+            // setPlayer4Name(res.data.player4Name);
         })
         .catch(err => console.log(err));
     }, []);
 
     // TODO: PUT TIMER CODE HERE
     useEffect(()=> {
-        const gameDataInterval = setInterval(() => {
-
-            // Here's an example of what you might do
-            // axios.get('http://localhost:4000/gameData')
-            // .then((res) => {
-            //     // update the game data here
-            //     console.log('updating the game');
-            // })
-            // .catch((err) => {
-            //     console.log('error getting game data: ', err.message);
-            // })
-
-
-        }, 500);
+        // const gameDataInterval = setInterval(() => {
+        //     axios.get('http://localhost:4000/playerScores')
+        //     .then((res) => {
+        //         // update the game data here
+        //         // setPlayerScore(res.data.playerScore);
+        //         // setPlayer2Score(res.data.player2Score);
+        //         // setPlayer3Score(res.data.player3Score);
+        //         // setPlayer4Score(res.data.player4Score);
+        //         console.log('updating the game');
+        //     })
+        //     .catch((err) => {
+        //         console.log('error getting game data: ', err.message);
+        //     })
+        // }, 500);
 
         return(()=>{
             clearInterval(gameDataInterval);
@@ -160,8 +163,6 @@ export function GridGame() {
             axios.post("http://localhost:4000/submitWord", {word: word})
             .then((res) => {
                 if(res.data.validWord){
-                    // increase player score
-                    setPlayerScore(playerScore + res.data.earnedPoints);
                     // add word to the display list
                     setWordList([...wordList, word]);
                     setStatus("Word found! " + res.data.earnedPoints + " points added!");
@@ -199,8 +200,8 @@ export function GridGame() {
             <div className="row">
                 <div className="col-md-3"><h2>{playerName}</h2><h3>{playerScore}</h3></div>
                 <div className="col-md-3"><h2>{player2Name}</h2><h3>{player2Score}</h3></div>
-                <div className="col-md-3"><h2>{player3Name}</h2><h3>{player3Score}</h3></div>
-                <div className="col-md-3"><h2>{player4Name}</h2><h3>{player4Score}</h3></div>
+                {player3Name != "" ? <div className="col-md-3"><h2>{player3Name}</h2><h3>{player3Score}</h3></div> : null}
+                {player4Name != "" ? <div className="col-md-3"><h2>{player4Name}</h2><h3>{player4Score}</h3></div> : null}
             </div><br /><br />
             <div className="row">
                 <div className="col-md-4">
