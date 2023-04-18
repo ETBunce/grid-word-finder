@@ -29,7 +29,7 @@ export function GridGame() {
         // axios.get("http://localhost:4000/getGrid") - Use this line when no longer testing - Ethan
         .then((res) => {
             setBoard(res.data);
-            // TODO: set the players
+            // set the players
             // setPlayerName(res.data.playerName);
             // setPlayer2Name(res.data.player2Name);
             // setPlayer3Name(res.data.player3Name);
@@ -40,20 +40,20 @@ export function GridGame() {
 
     // TODO: PUT TIMER CODE HERE
     useEffect(()=> {
-        // const gameDataInterval = setInterval(() => {
-        //     axios.get('http://localhost:4000/playerScores')
-        //     .then((res) => {
-        //         // update the game data here
-        //         // setPlayerScore(res.data.playerScore);
-        //         // setPlayer2Score(res.data.player2Score);
-        //         // setPlayer3Score(res.data.player3Score);
-        //         // setPlayer4Score(res.data.player4Score);
-        //         console.log('updating the game');
-        //     })
-        //     .catch((err) => {
-        //         console.log('error getting game data: ', err.message);
-        //     })
-        // }, 500);
+        const gameDataInterval = setInterval(() => {
+            // axios.get('http://localhost:4000/playerScores')
+            // .then((res) => {
+            //     // update the game data here
+            //     // setPlayerScore(res.data.playerScore);
+            //     // setPlayer2Score(res.data.player2Score);
+            //     // setPlayer3Score(res.data.player3Score);
+            //     // setPlayer4Score(res.data.player4Score);
+            //     console.log('updating the game');
+            // })
+            // .catch((err) => {
+            //     console.log('error getting game data: ', err.message);
+            // })
+        }, 500);
 
         let timer = 60;
         const gameTimerInterval = setInterval(() => {
@@ -181,7 +181,7 @@ export function GridGame() {
                     setWordList([...wordList, word]);
                     setStatus("Word found! " + res.data.earnedPoints + " points added!");
                 } else {
-                    setStatus("Not a real word!");
+                    setStatus("Not a valid word!");
                 }
             })
             .catch((err) => {
