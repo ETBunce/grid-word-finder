@@ -329,12 +329,12 @@ exports.setReady = (ready, resultFunc) => {
 }
 
 exports.leaveGame = (resultFunc) => {
-    console.log('leaving game: ', myName);
+    const leaveName = myName;
     withGame((game) => {
         for (let i = 0; i < game.players.length; i++) {
-            if (game.players[i].name == myName) {
-                console.log('successfuly removed ', myName, ' from the game');
+            if (game.players[i].name === leaveName) {
                 game.players.splice(i,1);
+                console.log('successfuly removed ', leaveName, ' from the game');
             }
         }
         if(updateLobby(game) && game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {

@@ -56,7 +56,7 @@ exports.newGame = (req, res) => {
 }
 
 exports.getLobbyState = (req, res) => {
-    console.log('got request to get lobby players');
+    // console.log('got request to get lobby players');
     gameLogic.requestLobbyState(req, res);
 }
 
