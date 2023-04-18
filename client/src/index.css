@@ -1,11 +1,16 @@
-body {
-    background-color: #82D6D4;
+html, body {
+    background: url("../public/lettersBackground1.jpg") no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
 }
 
 #main-content {
-    background-color: white;
+    background: rgb(255, 255, 255); /* Fallback for older browsers without RGBA-support */
+    background: rgba(255, 255, 255, 0.7);
     padding-top: 1%;
     padding-bottom: 1%;
+    border-radius: 5px;
 }
 
 #grid button {
@@ -32,6 +37,6 @@ body {
 
 #RTL {
     width: 100%;
-    margin: 0px;
+    margin: 0;
     font-size: 30px;
 }
