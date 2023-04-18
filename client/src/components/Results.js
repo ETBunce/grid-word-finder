@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 export function Results() {
     const [players, setPlayers] = useState([{name: "", words: [""], score: 0}]);
-    const [winner, setWinner] = useState();
+    const [winnerName, setWinnerName] = useState("");
     let navigate = useNavigate();
 
+    let winner = "";
     let winnerScore = 0;
 
     function returnToLobby() {
@@ -24,16 +25,22 @@ export function Results() {
                 if(res.data != null) {
                     setPlayers(res.data);
                 
-                    setWinner(res.data[0].name);
+                    winner = (res.data[0].name);
                     winnerScore = res.data[0].score;
                     for(let i = 1; i < res.data.length; i++) {
                         if(res.data[i].score > winnerScore) {
-                            setWinner(res.data[i].name);
+                            winner =(res.data[i].name);
                             winnerScore = res.data[i].score;
+                            if(winnerScore === 0) {
+                                winner = "you all suck";
+                            }
+                        }
+                        else if(res.data[i].score === winnerScore) {
+                            winner = (winner + " and " + res.data[i].name);
                         }
                     }
                 }
-                
+                setWinnerName(winner);
             })
             .catch((err) => {
                 console.log("Error showing results" + err.message);
@@ -59,7 +66,7 @@ export function Results() {
             ))}
             <div id="bottom">
                 <h2>Winner</h2>
-                <div id="winner">{winner}</div>
+                <div id="winner">{winnerName}</div>
                 <button type="button" id="RTL" onClick={returnToLobby}>Lobby List</button>
             </div>
         </center>
