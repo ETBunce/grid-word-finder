@@ -10,17 +10,27 @@ export function GridGame() {
     const [wordListString, setWordListString] = useState("");
     const [status, setStatus] = useState("");
     const [playerScore, setPlayerScore] = useState(0);
+    const [player2Score, setPlayer2Score] = useState(0);
+    const [player3Score, setPlayer3Score] = useState(0);
+    const [player4Score, setPlayer4Score] = useState(0);
+    const [playerName, setPlayerName] = useState("");
+    const [player2Name, set2PlayerName] = useState("");
+    const [player3Name, set3PlayerName] = useState("");
+    const [player4Name, set4PlayerName] = useState("");
 
     // get function gets game board, players
     useEffect(() => {
         axios.get("http://localhost:4000/gridSample")
-        // axios.get("http://localhost:4000/game") - Use this line when no longer testing - Ethan
+        // axios.get("http://localhost:4000/getGrid") - Use this line when no longer testing - Ethan
         .then((res) => {
             setBoard(res.data);
-            // TODO: set the players and player scores
+            // TODO: set the players
+            
         })
         .catch(err => console.log(err));
     }, []);
+
+    // TODO: PUT TIMER CODE HERE
 
     // onclick function for buttons change what is in the form
     function handleClick(e) {
@@ -131,10 +141,10 @@ export function GridGame() {
             .then((res) => {
                 if(res.data.validWord){
                     // increase player score
-                    setPlayerScore(playerScore + res.data.pointsGained);
+                    setPlayerScore(playerScore + res.data.earnedPoints);
                     // add word to the display list
                     setWordList([...wordList, word]);
-                    setStatus("Word found! " + res.data.pointsGained + " points added!");
+                    setStatus("Word found! " + res.data.earnedPoints + " points added!");
                 } else {
                     setStatus("Not a real word!");
                 }
@@ -167,10 +177,10 @@ export function GridGame() {
         <center>
             <h1>Grid Word Find</h1><br />
             <div className="row">
-                <div className="col-md-3"><h2>This Player</h2><h3>{playerScore}</h3></div>
-                <div className="col-md-3"><h2>Player 2</h2><h3>Score</h3></div>
-                <div className="col-md-3"><h2>Player 3</h2><h3>Score</h3></div>
-                <div className="col-md-3"><h2>Player 4</h2><h3>Score</h3></div>
+                <div className="col-md-3"><h2>{playerName}</h2><h3>{playerScore}</h3></div>
+                <div className="col-md-3"><h2>{player2Name}</h2><h3>{player2Score}</h3></div>
+                <div className="col-md-3"><h2>{player3Name}</h2><h3>{player3Score}</h3></div>
+                <div className="col-md-3"><h2>{player4Name}</h2><h3>{player4Score}</h3></div>
             </div><br /><br />
             <div className="row">
                 <div className="col-md-4">
