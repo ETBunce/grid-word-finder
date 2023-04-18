@@ -10,6 +10,10 @@ export function Results() {
     let winnerScore = 0;
 
     function returnToLobby() {
+        axios.post("http://localhost:4000/leaveGame")
+        .catch((err) => {
+            console.log("Error leaving game: " + err.message);
+        });
         navigate("../");
     }
 
