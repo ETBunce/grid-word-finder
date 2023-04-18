@@ -41,7 +41,11 @@ function startGame(game) {
     game.startTime = Date.now();
 }
 
-function checkAllReady(game) {
+function updateLobby(game) {
+    if (game.players.length < 1) {
+        AppGame.deleteOne({_id: gameId});
+        return false;
+    }
     let allReady = true;
     for (let i = 0; i < game.players.length; i++) {
         if (!game.players[i].ready) {
@@ -312,7 +316,7 @@ exports.setReady = (ready, resultFunc) => {
         if (player) {
             player.ready = ready;
         }
-        checkAllReady(game);
+        updateLobby(game);
         resultFunc({success: true, ready: ready});
     })
 
@@ -329,14 +333,18 @@ exports.leaveGame = (resultFunc) => {
     withGame((game) => {
         for (let i = 0; i < game.players.length; i++) {
             if (game.players[i].name == myName) {
+                console.log('successfuly removed ', myName, ' from the game');
                 game.players.splice(i,1);
             }
         }
-        if(checkAllReady(game) && game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {
+        if(updateLobby(game) && game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {
             game.canJoin = true;
         }
         resultFunc();
     });
+    gameId = '';
+    myName = '';
+
 }
 
 exports.getMaxPlayers = () => MAX_PLAYERS;
