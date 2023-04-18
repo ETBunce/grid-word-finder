@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 export function GridGame() {
-    const [board, setBoard] = useState([]);
+    const [board, setBoard] = useState("");
     const [word, setWord] = useState("");
     const [wordError, setWordError] = useState("");
     const [wordErrorFound, setWordErrorFound] = useState(false);
@@ -15,9 +15,9 @@ export function GridGame() {
     const [player3Score, setPlayer3Score] = useState(0);
     const [player4Score, setPlayer4Score] = useState(0);
     const [playerName, setPlayerName] = useState("");
-    const [player2Name, set2PlayerName] = useState("");
-    const [player3Name, set3PlayerName] = useState("");
-    const [player4Name, set4PlayerName] = useState("");
+    const [player2Name, setPlayer2Name] = useState("");
+    const [player3Name, setPlayer3Name] = useState("");
+    const [player4Name, setPlayer4Name] = useState("");
     const [gameTimer, setGameTimer] = useState(60);
 
     const navigate = useNavigate();
