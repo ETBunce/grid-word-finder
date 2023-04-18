@@ -354,30 +354,10 @@ exports.getMinPlayers = () => MIN_PLAYERS;
 
 exports.requestGameGrid = (req, res) => {
     withGame((game) => {
-        // check number of players
-        if(game.players.length === 2){
             res.json({
                 grid: game.grid,
-                playerName: game.players[0].name,
-                player2Name: game.players[1].name,
+                players: game.players
             });
-        }
-        else if(game.players.length === 3){
-            res.json({
-                grid: game.grid,
-                playerName: game.players[0].name,
-                player2Name: game.players[1].name,
-                player3Name: game.players[2].name,
-            });
-        } else if(game.players.length === 4){
-            res.json({
-                grid: game.grid,
-                playerName: game.players[0].name,
-                player2Name: game.players[1].name,
-                player3Name: game.players[2].name,
-                player4Name: game.players[3].name,
-            });
-        }
     });
 }
 
