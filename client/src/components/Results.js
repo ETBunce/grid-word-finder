@@ -31,12 +31,12 @@ export function Results() {
                         if(res.data[i].score > winnerScore) {
                             winner =(res.data[i].name);
                             winnerScore = res.data[i].score;
-                            if(winnerScore === 0) {
-                                winner = "you all suck";
-                            }
                         }
                         else if(res.data[i].score === winnerScore) {
                             winner = (winner + " and " + res.data[i].name);
+                            if(winnerScore === 0) {
+                                winner = "you all suck";
+                            }
                         }
                     }
                 }
