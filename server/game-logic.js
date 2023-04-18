@@ -96,16 +96,6 @@ function withGame(func, errorFunc) {
     return true; // Indicates the current game id has been set
 }
 
-
-function addScoreEvent(playerName, score) {
-    withGame((game) => { // Do this
-        game.scoreEvents.push({playerName: playerName, score: score});
-    },
-    () => { // Error
-
-    });
-}
-
 function addPlayer(game, playerName) {
 
     if (!game.canJoin) {
