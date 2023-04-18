@@ -174,6 +174,11 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
 }
 
 exports.submitWord = (req, res) => {
+    // Make sure we have current game grid
+    withGame((game) => {
+        currentGameGrid = game.grid;
+    })
+
     const guessedWord = req.body.word;
     const validWordScoreMatrix = [1, 2, 4, 7, 11, 16];
 
@@ -276,9 +281,6 @@ exports.setReady = (ready, resultFunc) => {
             }
         }
         if (allReady) {
-            currentGameGrid = generateGrid();
-            currentWordsGuessed = [];
-            currentScore = 0;
             game.stage = 'Starting';
             setTimeout(()=>{
                 game.stage = 'Playing';
@@ -287,6 +289,13 @@ exports.setReady = (ready, resultFunc) => {
             }, 3000);
         }
         resultFunc({success: true, ready: ready});
+    })
+
+    // set currentGameGrid to make it more easily accessible
+    currentWordsGuessed = [];
+    currentScore = 0;
+    withGame((game) => {
+        currentGameGrid = game.grid;
     })
 }
 
