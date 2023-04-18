@@ -14,7 +14,7 @@ let gameId = '';
 let myName = '';
 
 let validWordsFile;
-let currentGameGrid = "RAMFCEKOTHVUSBAD";  // change this when not testing
+let currentGameGrid = "RAMFCEKOTHVUSBAD";  // change this when not testing... or not, I'm not your parent.
 let currentWordsGuessed = [];
 let currentScore = 0;
 
