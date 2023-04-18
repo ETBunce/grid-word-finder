@@ -7,8 +7,15 @@ function PlayerNameSection(props) {
     const [showNameTakenHint, setShowNameTakenHint] = useState(false);
     
     function createLobby(playerName) {
-        console.log('player name submitted, creating lobby');
-        axios.post('http://localhost:4000/')
+        console.log('posting to newGame');
+        axios.post('http://localhost:4000/newGame', {playerName:playerName})
+        .then((res) => {
+            console.log('got a response from post to newGame: ', res);
+            props.goTo('LobbyRoom', {hostName: playerName});
+        })
+        .catch((err) => {
+            console.log('error creating new game: ' , err);
+        });
     }
 
     function joinLobby(playerName) {
@@ -39,15 +46,7 @@ function PlayerNameSection(props) {
 
     function handleSubmit(playerName) {
         if (props.options.newGame) {
-            console.log('posting to newGame');
-            axios.post('http://localhost:4000/newGame', {playerName:playerName})
-            .then((res) => {
-                console.log('got a response from post to newGame: ', res);
-                props.goTo('LobbyRoom', {hostName: playerName});
-            })
-            .catch((err) => {
-                console.log('error creating new game: ' , err);
-            })
+            createLobby(playerName);
         } else {
             joinLobby(playerName);
         }
