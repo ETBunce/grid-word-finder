@@ -237,6 +237,8 @@ exports.submitWord = (req, res) => {
         responseToPlayer.validWord = true;
         responseToPlayer.earnedPoints = earnedScore;
 
+        //TODO: fix this. The following code runs AFTER res.send below, which means
+        // the switch case doesn't do anything.
         withGame((game) => {
             for (let i = 0; i < game.players.length; i++) {
                 if (game.players[i] === myName) {
@@ -251,7 +253,6 @@ exports.submitWord = (req, res) => {
                     }
                 }
             }
-            game.save();
         })
     } else {
         console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
