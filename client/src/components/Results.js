@@ -52,8 +52,8 @@ export function Results() {
     return (
         <center>
             <h1>Results</h1>
-            {players.map((singlePerson) => (
-                <div id="player">
+            {players.map((singlePerson, index) => (
+                <div key={index} id="player">
                     <div id="name">Name: {singlePerson.name}</div>
                     <h3>Words Found:</h3>
                     <ul id="words">
