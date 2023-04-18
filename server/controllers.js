@@ -42,6 +42,12 @@ exports.joinGame = (req, res) => {
     })
 }
 
+exports.leaveGame = (req, res) => {
+    gameLogic.leaveGame((result) => {
+        res.send(result);
+    });
+}
+
 exports.newGame = (req, res) => {
     console.log('new game requested');
     gameLogic.createNewGame(req.body.playerName, (result) => {

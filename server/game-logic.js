@@ -1,5 +1,4 @@
 const AppGame = require('./models/game');
-const axios = require('axios');
 const fs = require("fs");
 
 
@@ -15,7 +14,7 @@ let gameId = '';
 let myName = '';
 
 let validWordsFile;
-let currentGameGrid = "RAMFCEKOTHVUSBAD";  // change this when not testing
+let currentGameGrid = "RAMFCEKOTHVUSBAD";  // change this when not testing... or not, I'm not your parent.
 let currentWordsGuessed = [];
 let currentScore = 0;
 
@@ -34,6 +33,35 @@ fs.readFile("assets/words.txt", "utf-8", function(err, data) {
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+}
+
+function startGame(game) {
+    game.stage = 'Playing';
+    game.grid = generateGrid();
+    game.startTime = Date.now();
+}
+
+function updateLobby(game) {
+    if (game.players.length < 1) {
+        AppGame.deleteOne({_id: gameId});
+        return false;
+    }
+    let allReady = true;
+    for (let i = 0; i < game.players.length; i++) {
+        if (!game.players[i].ready) {
+            allReady = false;
+            break;
+        }
+    }
+    if (allReady) {
+        game.canJoin = false;
+        game.stage = 'Starting';
+        setTimeout(()=>{
+            startGame(game);
+        }, 3000);
+        return true;
+    }
+    return false;
 }
 
 
@@ -288,21 +316,7 @@ exports.setReady = (ready, resultFunc) => {
         if (player) {
             player.ready = ready;
         }
-        let allReady = true;
-        for (let i = 0; i < game.players.length; i++) {
-            if (!game.players[i].ready) {
-                allReady = false;
-                break;
-            }
-        }
-        if (allReady) {
-            game.stage = 'Starting';
-            setTimeout(()=>{
-                game.stage = 'Playing';
-                game.grid = generateGrid();
-                game.save();
-            }, 3000);
-        }
+        updateLobby(game);
         resultFunc({success: true, ready: ready});
     })
 
@@ -312,6 +326,25 @@ exports.setReady = (ready, resultFunc) => {
     withGame((game) => {
         currentGameGrid = game.grid;
     })
+}
+
+exports.leaveGame = (resultFunc) => {
+    console.log('leaving game: ', myName);
+    withGame((game) => {
+        for (let i = 0; i < game.players.length; i++) {
+            if (game.players[i].name == myName) {
+                console.log('successfuly removed ', myName, ' from the game');
+                game.players.splice(i,1);
+            }
+        }
+        if(updateLobby(game) && game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {
+            game.canJoin = true;
+        }
+        resultFunc();
+    });
+    gameId = '';
+    myName = '';
+
 }
 
 exports.getMaxPlayers = () => MAX_PLAYERS;
