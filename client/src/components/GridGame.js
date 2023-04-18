@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 export function GridGame() {
     const [board, setBoard] = useState([]);
@@ -17,6 +18,10 @@ export function GridGame() {
     const [player2Name, set2PlayerName] = useState("");
     const [player3Name, set3PlayerName] = useState("");
     const [player4Name, set4PlayerName] = useState("");
+    const [gameTimer, setGameTimer] = useState(60);
+
+    const navigate = useNavigate();
+
 
     // get function gets game board, players
     useEffect(() => {
@@ -50,8 +55,17 @@ export function GridGame() {
         //     })
         // }, 500);
 
+        let timer = 60;
+        const gameTimerInterval = setInterval(() => {
+            setGameTimer(--timer);
+            if(timer === 0) {
+                navigate('/results');
+            }
+        }, 1000);
+
         return(()=>{
             clearInterval(gameDataInterval);
+            clearInterval(gameTimerInterval);
         });
     }, [])
 
@@ -247,6 +261,9 @@ export function GridGame() {
                     <h2>Your words</h2>
                     <p>{wordListString}</p><br /> <br />
                     <p>{status}</p>
+                </div>
+                <div>
+                    Time remaining: {gameTimer}
                 </div>
             </div>
         </center>
