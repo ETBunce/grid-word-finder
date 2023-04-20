@@ -37,7 +37,7 @@ function getGameAgeSeconds(game) {
     return (Date.now() - game.startTime) / 1000;
 }
 
-AppGame.find({stage: 'Playing'}) // Add a condition here to check game.startTime is too old
+AppGame.find({stage: 'Playing'})
     .then((games) => {
         console.log('checking games to delete: ');
         for (let i = 0; i < games.length; i++) {
