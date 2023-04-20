@@ -35,7 +35,7 @@ export function Results() {
                         else if(res.data[i].score === winnerScore) {
                             winner = (winner + " and " + res.data[i].name);
                             if(winnerScore === 0) {
-                                winner = "you all suck";
+                                winner = "You all suck";
                             }
                         }
                     }

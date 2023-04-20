@@ -9,6 +9,8 @@ const GRID_HEIGHT = 4;
 const GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
 const MAX_PLAYERS = 4;
 const MIN_PLAYERS = 1; // TODO: Change this to 2 when done testing
+const GAME_MATCH_TIME = 60;
+const GAME_DELETE_AGE = 10; // seconds
 
 let gameId = '';
 let myName = '';
@@ -30,6 +32,19 @@ fs.readFile("assets/words.txt", "utf-8", function(err, data) {
 })
 
 // TODO - DELETE ALL GAMES IN DB THAT ARE EXPIRED
+
+AppGame.find({}) // Add a condition here to check game.startTime is too old
+    .then((games) => {
+        console.log('deleting games');
+        for (let i = 0; i < games.length; i++) {
+            
+        }
+    })
+    .catch(err => console.log('error finding games to delete: ' , err.message));
+
+function isGameOver(game) {
+    return (Date.now() - game.startTime) > GAME_MATCH_TIME * 1000;
+}
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -213,8 +228,10 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
 exports.submitWord = async (req, res) => {
     console.log("player name: %s", myName);
     // Make sure we have current game grid
+    let gameOver = false;
     await withGame((game) => {
         currentGameGrid = game.grid;
+        gameOver = isGameOver(game);
     })
 
     const guessedWord = req.body.word;
@@ -235,6 +252,7 @@ exports.submitWord = async (req, res) => {
         && validWordsFile.includes(guessedWord.toLowerCase()) // check in-mem valid words file
         && validateWord(guessedWord)
         && !currentWordsGuessed.includes(guessedWord)
+        && !gameOver
     ) {
         let earnedScore = guessedWord.length > 8 ? 22 : validWordScoreMatrix[guessedWord.length - 3];
         currentScore += earnedScore;
@@ -246,7 +264,7 @@ exports.submitWord = async (req, res) => {
         responseToPlayer.earnedPoints = earnedScore;
         await withGame((game) => {
             for (let i = 0; i < game.players.length; i++) {
-                if (game.players[i] === myName) {
+                if (game.players[i].name === myName) {
                     game.players[i].score = currentScore;
                     game.players[i].words = currentWordsGuessed;
                 } else {
