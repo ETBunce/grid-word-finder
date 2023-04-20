@@ -264,7 +264,7 @@ exports.submitWord = async (req, res) => {
         responseToPlayer.earnedPoints = earnedScore;
         await withGame((game) => {
             for (let i = 0; i < game.players.length; i++) {
-                if (game.players[i] === myName) {
+                if (game.players[i].name === myName) {
                     game.players[i].score = currentScore;
                     game.players[i].words = currentWordsGuessed;
                 } else {
