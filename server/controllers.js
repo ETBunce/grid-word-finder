@@ -1,21 +1,21 @@
 const gameLogic = require('./game-logic');
 const AppGame = require('./models/game');
 
-exports.getGame = (req, res)=> {
-    gameLogic.requestGameGrid(req, res);
+exports.getGame = async (req, res)=> {
+    await gameLogic.requestGameGrid(req, res);
 }
 
-exports.getPlayerScores = (req, res) => {
-    gameLogic.requestPlayerScores(req, res);
+exports.getPlayerScores = async (req, res) => {
+    await gameLogic.requestPlayerScores(req, res);
 }
 
-exports.submitWord = (req, res) => {
-    gameLogic.submitWord(req, res);
+exports.submitWord = async (req, res) => {
+    await gameLogic.submitWord(req, res);
 
 }
 
-exports.getLobbyList = (req, res) => {
-    AppGame.find({canJoin: true})
+exports.getLobbyList = async (req, res) => {
+    await AppGame.find({canJoin: true})
     .then((lobbies) => {
         let list = [];
         for (let i = 0; i < lobbies.length; i++ ) {
@@ -42,27 +42,27 @@ exports.joinGame = (req, res) => {
     })
 }
 
-exports.leaveGame = (req, res) => {
-    gameLogic.leaveGame((result) => {
+exports.leaveGame = async (req, res) => {
+    await gameLogic.leaveGame((result) => {
         res.send(result);
     });
 }
 
-exports.newGame = (req, res) => {
+exports.newGame = async (req, res) => {
     console.log('new game requested');
-    gameLogic.createNewGame(req.body.playerName, (result) => {
+    await gameLogic.createNewGame(req.body.playerName, (result) => {
         res.send(result);
     });
 }
 
-exports.getLobbyState = (req, res) => {
+exports.getLobbyState = async (req, res) => {
     // console.log('got request to get lobby players');
-    gameLogic.requestLobbyState(req, res);
+    await gameLogic.requestLobbyState(req, res);
 }
 
-exports.setReady = (req, res) => {
+exports.setReady = async (req, res) => {
     console.log('got request to set ready: ' , req.body.ready);
-    gameLogic.setReady(req.body.ready, (result) => {
+    await gameLogic.setReady(req.body.ready, (result) => {
         console.log('got result: ', result);
         res.send(result);
     });

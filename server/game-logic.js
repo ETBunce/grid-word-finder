@@ -187,7 +187,7 @@ function addPlayer(game, playerName) {
     return true;
 }
 
-exports.createNewGame = (hostPlayerName, resultFunc) => {
+exports.createNewGame = async (hostPlayerName, resultFunc) => {
 
     gameId = '';
 
@@ -347,8 +347,8 @@ function traverseWord(currItr, currLetterItr, wordToCheck, visitedStates=[]) {
 }
 
 // Game starts here if all players are ready
-exports.setReady = (ready, resultFunc) => {
-    withGame((game) => {
+exports.setReady = async (ready, resultFunc) => {
+    await withGame((game) => {
         if (game.stage !== 'Lobby') return;
         const player = game.players.find((player) => player.name === myName);
         if (player) {
@@ -361,7 +361,7 @@ exports.setReady = (ready, resultFunc) => {
     // set currentGameGrid to make it more easily accessible
     currentWordsGuessed = [];
     currentScore = 0;
-    withGame((game) => {
+    await withGame((game) => {
         currentGameGrid = game.grid;
     })
 }
@@ -398,8 +398,8 @@ exports.getMinPlayers = () => MIN_PLAYERS;
 
 // CONTROLLER INTERFACE
 
-exports.requestGameGrid = (req, res) => {
-    withGame((game) => {
+exports.requestGameGrid = async (req, res) => {
+    await withGame((game) => {
             res.json({
                 grid: game.grid,
                 players: game.players
@@ -407,14 +407,14 @@ exports.requestGameGrid = (req, res) => {
     });
 }
 
-exports.requestPlayerScores = (req, res) => {
-    withGame((game) => {
+exports.requestPlayerScores = async (req, res) => {
+    await withGame((game) => {
         res.send(game.players);
     })
 }
 
-exports.requestLobbyState = (req, res) => {
-    withGame((game) => {
+exports.requestLobbyState = async (req, res) => {
+    await withGame((game) => {
         let players = [];
         for (let i = 0; i < game.players.length; i++) {
             players.push({name:game.players[i].name, ready: game.players[i].ready});
