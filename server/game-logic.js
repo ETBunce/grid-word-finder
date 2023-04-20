@@ -109,12 +109,12 @@ function generateGrid() {
 
 //TODO: Test this function
 // 
-function withGame(func, errorFunc) {
+async function withGame(func, errorFunc) {
     if (gameId === '') {
         console.log('withGame: current gameId is blank.');
         return false;
     }
-    AppGame.findOne({_id:gameId})
+    await AppGame.findOne({_id:gameId})
     .then((game) => {
         func(game);
         game.save();
@@ -203,9 +203,10 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
     })
 }
 
-exports.submitWord = (req, res) => {
+exports.submitWord = async (req, res) => {
+    console.log("player name: %s", myName);
     // Make sure we have current game grid
-    withGame((game) => {
+    await withGame((game) => {
         currentGameGrid = game.grid;
     })
 
@@ -236,10 +237,7 @@ exports.submitWord = (req, res) => {
         responseToPlayer.success = true;
         responseToPlayer.validWord = true;
         responseToPlayer.earnedPoints = earnedScore;
-
-        //TODO: fix this. The following code runs AFTER res.send below, which means
-        // the switch case doesn't do anything.
-        withGame((game) => {
+        await withGame((game) => {
             for (let i = 0; i < game.players.length; i++) {
                 if (game.players[i] === myName) {
                     game.players[i].score = currentScore;
@@ -260,8 +258,8 @@ exports.submitWord = (req, res) => {
         responseToPlayer.validWord = false;
     }
     responseToPlayer.playerGuessedWords = currentWordsGuessed;
-
     res.send(responseToPlayer);
+
 }
 
 
