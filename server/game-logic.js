@@ -33,12 +33,16 @@ fs.readFile("assets/words.txt", "utf-8", function(err, data) {
 
 // TODO - DELETE ALL GAMES IN DB THAT ARE EXPIRED
 
+function getGameAgeSeconds(game) {
+    return (Date.now() - game.startTime) / 1000;
+}
+
 AppGame.find({stage: 'Playing'}) // Add a condition here to check game.startTime is too old
     .then((games) => {
         console.log('checking games to delete: ');
         for (let i = 0; i < games.length; i++) {
-            console.log('time difference for game ', i, Date.now() - games[i].startTime);
-            if ((Date.now() - games[i].startTime) > (GAME_MATCH_TIME * 1000 + GAME_DELETE_AGE * 1000)) {
+            console.log('game age: ', getGameAgeSeconds(games[i]));
+            if (getGameAgeSeconds(games[i]) > GAME_MATCH_TIME + GAME_DELETE_AGE) {
                 console.log('game is old, deleting ', games[i].id);
                 AppGame.deleteOne({_id:games[i]._id})
                 .then(() => {
