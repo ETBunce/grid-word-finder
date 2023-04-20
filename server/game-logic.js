@@ -77,7 +77,7 @@ function updateLobby(game) {
                 console.log('deleted game');
             })
             .catch(err => console.log('error deleting game: ', err.message));
-        return false;
+        return 'DeadGame';
     }
     console.log('players still remain, checking all ready');
     let allReady = true;
@@ -95,9 +95,9 @@ function updateLobby(game) {
             console.log('game was started, grid is' , game.grid);
             game.save();
         }, 3000);
-        return true;
+        return 'Starting';
     }
-    return false;
+    return '';
 }
 
 
@@ -143,7 +143,7 @@ function generateGrid() {
 
 //TODO: Test this function
 // 
-async function withGame(func, errorFunc) {
+async function withGame(func, errorFunc, doNotSave) {
     if (gameId === '') {
         console.log('withGame: current gameId is blank.');
         return false;
@@ -151,7 +151,7 @@ async function withGame(func, errorFunc) {
     await AppGame.findOne({_id:gameId})
     .then((game) => {
         func(game);
-        game.save();
+        if (!doNotSave) game.save();
     })
     .catch((err) => {
         console.log('error working with game: ' + err.message);
@@ -375,11 +375,19 @@ exports.leaveGame = (resultFunc) => {
                 console.log('successfuly removed ', leaveName, ' from the game');
             }
         }
-        if(updateLobby(game) && game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {
+
+        if (updateLobby(game) === 'DeadGame') {
+            resultFunc();
+            return;
+        }
+        
+        if(game.stage === 'Lobby' && game.players.length < MAX_PLAYERS) {
             game.canJoin = true;
         }
+
         resultFunc();
-    });
+        game.save();
+    }, null, true);
     gameId = '';
     myName = '';
 
