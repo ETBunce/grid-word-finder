@@ -49,7 +49,7 @@ exports.leaveGame = async (req, res) => {
 }
 
 exports.newGame = async (req, res) => {
-    console.log('new game requested');
+    // console.log('new game requested');
     await gameLogic.createNewGame(req.body.playerName, (result) => {
         res.send(result);
     });
@@ -61,9 +61,9 @@ exports.getLobbyState = async (req, res) => {
 }
 
 exports.setReady = async (req, res) => {
-    console.log('got request to set ready: ' , req.body.ready);
+    // console.log('got request to set ready: ' , req.body.ready);
     await gameLogic.setReady(req.body.ready, (result) => {
-        console.log('got result: ', result);
+        // console.log('got result: ', result);
         res.send(result);
     });
 }
