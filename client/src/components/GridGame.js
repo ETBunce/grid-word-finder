@@ -95,7 +95,7 @@ export function GridGame() {
             let currentLetterIndexes = [];
             let letterFound = false;
             let indexesUsed = [];
-            for (let i = (word.length - 1); i > 0; i--){
+            for (let i = (word.length - 1); i >= 0; i--){
                 // checks if letter is in the board
                 if (board.includes(word[i])){
                     setWordError("");
