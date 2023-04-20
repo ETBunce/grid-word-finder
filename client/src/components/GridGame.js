@@ -138,7 +138,7 @@ export function GridGame() {
         if(word.length > 2 && validateWord(word)){
             setWordError("");
         } else {
-            setWordError("Word is not long enough.");
+            setWordError("Word is not valid!");
         }
     }, [word]);
 
