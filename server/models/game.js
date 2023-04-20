@@ -14,7 +14,7 @@ const GameSchema = mongoose.Schema(
         startTime: Number,
         hostPlayerName: String,
         canJoin: Boolean,
-        stage: String // Could be equal to Lobby, Starting, Playing, Finished
+        stage: String // Could be equal to Lobby, Starting, Playing
     }
 );
 
