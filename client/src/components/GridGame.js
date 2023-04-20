@@ -95,7 +95,7 @@ export function GridGame() {
             let currentLetterIndexes = [];
             let letterFound = false;
             let indexesUsed = [];
-            for (let i = 0; i < word.length; i++){
+            for (let i = (word.length - 1); i > 0; i--){
                 // checks if letter is in the board
                 if (board.includes(word[i])){
                     setWordError("");
@@ -104,7 +104,7 @@ export function GridGame() {
                     break;
                 }
                 // compares the letter to surrounding letters
-                if(i === 0){
+                if(i === (word.length - 1)){
                     lastLetter = word[i]; // sets the first letter
                     lastLetterIndexes = [];
                     for(let t = 0; t < 16; t++){
