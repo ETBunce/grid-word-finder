@@ -27,7 +27,7 @@ fs.readFile("assets/words.txt", "utf-8", function(err, data) {
         for (let i = 0; i < validWordsFile.length; i++) {
             validWordsFile[i] = validWordsFile[i].replace("\r", "").replace("\n", "");
         }
-        console.log("Successfully pulled in %s valid words (assets/words.txt) file.", validWordsFile.length);
+        // console.log("Successfully pulled in %s valid words (assets/words.txt) file.", validWordsFile.length);
     }
 })
 
@@ -39,14 +39,14 @@ function getGameAgeSeconds(game) {
 
 AppGame.find({stage: 'Playing'}) // Add a condition here to check game.startTime is too old
     .then((games) => {
-        console.log('checking games to delete: ');
+        // console.log('checking games to delete: ');
         for (let i = 0; i < games.length; i++) {
-            console.log('game age: ', getGameAgeSeconds(games[i]));
+            // console.log('game age: ', getGameAgeSeconds(games[i]));
             if (getGameAgeSeconds(games[i]) > GAME_MATCH_TIME + GAME_DELETE_AGE) {
-                console.log('game is old, deleting ', games[i].id);
+                // console.log('game is old, deleting ', games[i].id);
                 AppGame.deleteOne({_id:games[i]._id})
                 .then(() => {
-                    console.log('deleted the game');
+                    // console.log('deleted the game');
                 });
             }
         }
@@ -54,7 +54,7 @@ AppGame.find({stage: 'Playing'}) // Add a condition here to check game.startTime
     .catch(err => console.log('error finding games to delete: ' , err.message));
 
 function isGameOver(game) {
-    console.log('checking game over. game age (seconds): ', (Date.now() - game.startTime) / 1000);
+    // console.log('checking game over. game age (seconds): ', (Date.now() - game.startTime) / 1000);
     return (Date.now() - game.startTime) > GAME_MATCH_TIME * 1000;
 }
 
@@ -69,17 +69,17 @@ function startGame(game) {
 }
 
 function updateLobby(game) {
-    console.log('updating lobby');
+    // console.log('updating lobby');
     if (game.players.length < 1) {
-        console.log('last player, deleting game');
+        // console.log('last player, deleting game');
         AppGame.deleteOne({_id: game._id})
             .then((game) => {
-                console.log('deleted game');
+                // console.log('deleted game');
             })
             .catch(err => console.log('error deleting game: ', err.message));
         return 'DeadGame';
     }
-    console.log('players still remain, checking all ready');
+    // console.log('players still remain, checking all ready');
     let allReady = true;
     for (let i = 0; i < game.players.length; i++) {
         if (!game.players[i].ready) {
@@ -92,7 +92,7 @@ function updateLobby(game) {
         game.stage = 'Starting';
         setTimeout(()=>{
             startGame(game);
-            console.log('game was started, grid is' , game.grid);
+            // console.log('game was started, grid is' , game.grid);
             game.save();
         }, 3000);
         return 'Starting';
@@ -145,7 +145,7 @@ function generateGrid() {
 // 
 async function withGame(func, errorFunc, doNotSave) {
     if (gameId === '') {
-        console.log('withGame: current gameId is blank.');
+        // console.log('withGame: current gameId is blank.');
         return false;
     }
     await AppGame.findOne({_id:gameId})
@@ -204,7 +204,7 @@ exports.createNewGame = (hostPlayerName, resultFunc) => {
 
     AppGame.create(newGame)
     .then((game) => {
-        console.log('created a game');
+        // console.log('created a game');
         myName = hostPlayerName;
         gameId = game._id;
         addPlayer(game, hostPlayerName);
@@ -238,7 +238,7 @@ exports.joinGame = (name, joinGameId, resultFunc) => {
 }
 
 exports.submitWord = async (req, res) => {
-    console.log("player name: %s", myName);
+    // console.log("player name: %s", myName);
     // Make sure we have current game grid
     let gameOver = false;
     await withGame((game) => {
@@ -269,7 +269,7 @@ exports.submitWord = async (req, res) => {
         let earnedScore = guessedWord.length > 8 ? 22 : validWordScoreMatrix[guessedWord.length - 3];
         currentScore += earnedScore;
         currentWordsGuessed.push(guessedWord);
-        console.log("Player sent word: \"%s\" which is a valid word and earned %s points. New player score: %s", guessedWord, earnedScore, currentScore);
+        // console.log("Player sent word: \"%s\" which is a valid word and earned %s points. New player score: %s", guessedWord, earnedScore, currentScore);
 
         responseToPlayer.success = true;
         responseToPlayer.validWord = true;
@@ -290,7 +290,7 @@ exports.submitWord = async (req, res) => {
             }
         })
     } else {
-        console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
+        // console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
         responseToPlayer.success = true;
         responseToPlayer.validWord = false;
     }
@@ -372,7 +372,7 @@ exports.leaveGame = (resultFunc) => {
         for (let i = 0; i < game.players.length; i++) {
             if (game.players[i].name === leaveName) {
                 game.players.splice(i,1);
-                console.log('successfuly removed ', leaveName, ' from the game');
+                // console.log('successfuly removed ', leaveName, ' from the game');
             }
         }
 
