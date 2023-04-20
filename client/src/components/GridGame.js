@@ -135,11 +135,6 @@ export function GridGame() {
 
     // runs whenever word changes, checks validity of word
     useEffect(() => {
-
-
-
-
-
         if(word.length > 2 && validateWord(word)){
             setWordError("");
         } else {
