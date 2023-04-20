@@ -42,10 +42,17 @@ function startGame(game) {
 }
 
 function updateLobby(game) {
+    console.log('updating lobby');
     if (game.players.length < 1) {
-        AppGame.deleteOne({_id: gameId});
+        console.log('last player, deleting game');
+        AppGame.deleteOne({_id: game._id})
+            .then((game) => {
+                console.log('deleted game');
+            })
+            .catch(err => console.log('error deleting game: ', err.message));
         return false;
     }
+    console.log('players still remain, checking all ready');
     let allReady = true;
     for (let i = 0; i < game.players.length; i++) {
         if (!game.players[i].ready) {
