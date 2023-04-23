@@ -199,10 +199,10 @@ export function GridGame() {
         <center>
             <h1>Grid Word Find</h1><br />
             <div className="row">
-                <div className="col-md-3"><h2>{playerName}</h2><h3>{playerScore}</h3></div>
-                <div className="col-md-3"><h2>{player2Name}</h2><h3>{player2Score}</h3></div>
-                {player3Name !== "" ? <div className="col-md-3"><h2>{player3Name}</h2><h3>{player3Score}</h3></div> : null}
-                {player4Name !== "" ? <div className="col-md-3"><h2>{player4Name}</h2><h3>{player4Score}</h3></div> : null}
+                <div className="col-md-3 text-break"><h2>{playerName}</h2><h3>{playerScore}</h3></div>
+                <div className="col-md-3 text-break"><h2>{player2Name}</h2><h3>{player2Score}</h3></div>
+                {player3Name !== "" ? <div className="col-md-3 text-break"><h2>{player3Name}</h2><h3>{player3Score}</h3></div> : null}
+                {player4Name !== "" ? <div className="col-md-3 text-break"><h2>{player4Name}</h2><h3>{player4Score}</h3></div> : null}
             </div><br /><br />
             <div className="row">
                 <div className="col-lg-4">
