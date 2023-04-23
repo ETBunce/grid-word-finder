@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function Results() {
-    const [players, setPlayers] = useState([{name: "Player 1", words: [], score: 0}, {name: "Player 2", words: [], score: 0}]);
+    const [players, setPlayers] = useState([]);
     const [winnerName, setWinnerName] = useState("");
     let navigate = useNavigate();
     const validWordScoreMatrix = [1, 2, 4, 7, 11, 16];
