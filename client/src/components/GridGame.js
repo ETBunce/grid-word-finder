@@ -9,16 +9,17 @@ export function GridGame() {
     const [wordErrorFound, setWordErrorFound] = useState(false);
     const [wordList, setWordList] = useState([]);
     const [wordListString, setWordListString] = useState("");
-    const [status, setStatus] = useState("");
     const [playerScore, setPlayerScore] = useState(0);
     const [player2Score, setPlayer2Score] = useState(0);
     const [player3Score, setPlayer3Score] = useState(0);
     const [player4Score, setPlayer4Score] = useState(0);
-    const [playerName, setPlayerName] = useState("");
-    const [player2Name, setPlayer2Name] = useState("");
+    const [playerName, setPlayerName] = useState("Player 1");
+    const [player2Name, setPlayer2Name] = useState("Player 2");
     const [player3Name, setPlayer3Name] = useState("");
     const [player4Name, setPlayer4Name] = useState("");
     const [gameTimer, setGameTimer] = useState(60);
+    const [validWord, setValidWord] = useState(false);
+    const [wordSuccess, setWordSuccess] = useState("Word is valid!");
 
     const navigate = useNavigate();
 
@@ -43,7 +44,6 @@ export function GridGame() {
         .catch(err => console.log(err));
     }, []);
 
-    // TODO: PUT TIMER CODE HERE
     useEffect(()=> {
         const gameDataInterval = setInterval(() => {
             axios.get('http://localhost:4000/playerScores')
@@ -65,10 +65,8 @@ export function GridGame() {
 
         let timer = 60;
         const gameTimerInterval = setInterval(() => {
-            setGameTimer(--timer);
-            if(timer === 0) {
-                navigate('/results');
-            }
+            if (timer > 0) setGameTimer(--timer);
+            if(timer <= 0) navigate('/results');
         }, 1000);
 
         return(()=>{
@@ -155,16 +153,19 @@ export function GridGame() {
     // handles word submission
     function handleSubmit(e){
         e.preventDefault();
+        setValidWord(false);
         if(!wordList.includes(word)){
             // post method to submit word
             axios.post("http://localhost:4000/submitWord", {word: word})
             .then((res) => {
                 if(res.data.validWord){
+                    setWordSuccess("Word found! " + res.data.earnedPoints + " points added!");
+                    setValidWord(true);
                     // add word to the display list
                     setWordList([...wordList, word]);
-                    setStatus("Word found! " + res.data.earnedPoints + " points added!");
                 } else {
-                    setStatus("Not a valid word!");
+                    setWordError("Not a valid word!");
+                    setWordErrorFound(true);
                 }
             })
             .catch((err) => {
@@ -172,7 +173,8 @@ export function GridGame() {
                 console.log(err.message);
             });
         } else{
-            setStatus("Word already used!");
+            setWordError("Word already used!");
+            setWordErrorFound(true);
         }
     }
 
@@ -185,6 +187,8 @@ export function GridGame() {
     }, [wordList])
 
     function handleChange(e) {
+        setValidWord(false);
+        e.target.value = e.target.value.trim();
         let value = "";
         value = e.target.value;
         value = value.toUpperCase();
@@ -197,56 +201,77 @@ export function GridGame() {
             <div className="row">
                 <div className="col-md-3"><h2>{playerName}</h2><h3>{playerScore}</h3></div>
                 <div className="col-md-3"><h2>{player2Name}</h2><h3>{player2Score}</h3></div>
-                {player3Name != "" ? <div className="col-md-3"><h2>{player3Name}</h2><h3>{player3Score}</h3></div> : null}
-                {player4Name != "" ? <div className="col-md-3"><h2>{player4Name}</h2><h3>{player4Score}</h3></div> : null}
+                {player3Name !== "" ? <div className="col-md-3"><h2>{player3Name}</h2><h3>{player3Score}</h3></div> : null}
+                {player4Name !== "" ? <div className="col-md-3"><h2>{player4Name}</h2><h3>{player4Score}</h3></div> : null}
             </div><br /><br />
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div id = "grid">
-                        <button onClick={() => handleClick(0)}>{board[0]}</button>
-                        <button onClick={() => handleClick(1)}>{board[1]}</button>
-                        <button onClick={() => handleClick(2)}>{board[2]}</button>
-                        <button onClick={() => handleClick(3)}>{board[3]}</button>
+                        <div className={"btn-group"}>
+                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(0)}>{board[0]}</button>
+                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(1)}>{board[1]}</button>
+                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(2)}>{board[2]}</button>
+                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(3)}>{board[3]}</button>
+                        </div>
                         <br />
-                        <button onClick={() => handleClick(4)}>{board[4]}</button>
-                        <button onClick={() => handleClick(5)}>{board[5]}</button>
-                        <button onClick={() => handleClick(6)}>{board[6]}</button>
-                        <button onClick={() => handleClick(7)}>{board[7]}</button>
+                        <div className={"btn-group"}>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(4)}>{board[4]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(5)}>{board[5]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(6)}>{board[6]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(7)}>{board[7]}</button>
                         <br />
-                        <button onClick={() => handleClick(8)}>{board[8]}</button>
-                        <button onClick={() => handleClick(9)}>{board[9]}</button>
-                        <button onClick={() => handleClick(10)}>{board[10]}</button>
-                        <button onClick={() => handleClick(11)}>{board[11]}</button>
+                        </div>
+                            <div className={"btn-group"}>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(8)}>{board[8]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(9)}>{board[9]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(10)}>{board[10]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(11)}>{board[11]}</button>
                         <br />
-                        <button onClick={() => handleClick(12)}>{board[12]}</button>
-                        <button onClick={() => handleClick(13)}>{board[13]}</button>
-                        <button onClick={() => handleClick(14)}>{board[14]}</button>
-                        <button onClick={() => handleClick(15)}>{board[15]}</button>
-                    </div><br />
-                    <button onClick={() => undoClick()}>Undo</button><br /><br />
+                            </div>
+                                <div className={"btn-group"}>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(12)}>{board[12]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(13)}>{board[13]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(14)}>{board[14]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(15)}>{board[15]}</button>
+                                </div>
+                                </div><br />
+                    <button type={"button"} className={"btn btn-warning"} onClick={() => undoClick()}>Undo</button><br /><br />
                     <div>
-                        Time remaining: {gameTimer}
+                        <div className="progress" style={{height: "25px"}}>
+                            <div
+                                className={gameTimer > 15 ? "progress-bar progress-bar-striped progress-bar-animated bg-success" :
+                                    gameTimer > 5 ? "progress-bar progress-bar-striped progress-bar-animated bg-warning" :
+                                        "progress-bar progress-bar-striped progress-bar-animated bg-danger"}
+                                 style={{width: ((gameTimer / 60 * 100).toString() + "%")}}>
+                            </div>
+                        </div>
+                        <h5>Time remaining: {gameTimer}</h5>
                     </div>
                 </div>
                 <div className="col-md-4">
+
                     <form onSubmit={handleSubmit} noValidate>
-                        <label>Enter a word from the grid:</label><br />
-                        <input
-                            type="text"
-                            name="word"
-                            value={word}
-                            onChange={handleChange}
-                        /><br /><br />
-                        <button type="submit" disabled={wordErrorFound}>
-                            Submit word
-                        </button>
-                    </form><br /> <br />
-                    {wordErrorFound ? <p>{wordError}</p> : null}
+                        <div className={"form-group"}>
+                            <label>Enter a word from the grid:</label><br />
+                            <input className={validWord ? "form-control is-valid" : wordErrorFound ? "form-control is-invalid" : "form-control"} type="text" name="word" value={word} onChange={handleChange} required={true}/>
+                            <div className="valid-feedback">{wordSuccess}</div>
+                            <div className="invalid-feedback">{wordError}</div>
+                            <br /><br />
+                            <button className={"btn btn-success"} type="submit" disabled={wordErrorFound}>
+                                Submit word
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <div className="col-md-4">
-                    <h2>Your words</h2>
-                    <p>{wordListString}</p><br /> <br />
-                    <p>{status}</p>
+                    <div className={"card"}>
+                        <div className={"card-header"}>
+                            <h2>Your words</h2>
+                        </div>
+                        <div className={"card-body"}>
+                            <h5>{wordListString}</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
         </center>

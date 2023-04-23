@@ -15,8 +15,16 @@ function LobbyRoomSection (props) {
     function PlayerList() {
         let list = [];
         for (let i = 0; i < players.length; i++) {
-            const text = players[i].name + ' ' + (players[i].ready ? '(Ready)' : '(Not Ready)');
-            list.push(<div key={players[i].name}>{text}</div>)
+            const classNameText = 'form-control mx-auto ' + (players[i].ready ? 'is-valid' : 'is-invalid');
+            const classNameLabel = 'input-group-text text-center text-break text-white ' + (players[i].ready ? 'bg-success' : 'bg-danger')
+            list.push(
+                <div className={"input-group mb-3 mx-auto"} key={players[i].name}>
+                    <input type={'text'} className={classNameText} value={players[i].name} style={{backgroundColor: "white"}} readOnly/>
+                    <div className={'input-group-append'}>
+                        <span className={classNameLabel} style={{minWidth: "110px"}}>{players[i].ready ? 'Ready' : 'Not Ready'}</span>
+                    </div>
+                </div>
+            )
         }
         return list;
     }
@@ -33,7 +41,7 @@ function LobbyRoomSection (props) {
         gameStartCountDownInterval.current = setInterval(()=> {
             setCountDown(--thisCount);
             // console.log('this count is', thisCount);
-            if (thisCount == 0) {
+            if (thisCount === 0) {
                 navigate('/game');
             }
 
@@ -79,26 +87,34 @@ function LobbyRoomSection (props) {
 
     return (
         <center>
-            <h1>{props.options.hostName + "'s game"}</h1>
-            <PlayerList/>
-            {countdown > 0 ? 
-                <div>
-                    Game starting in: {countdown}
+            <h1 className={"text-capitalize"}>{props.options.hostName + "'s game"}</h1>
+            <div className={'card'}>
+                <div className={'card-body bg-light'}>
+                    <div className={"row"}>
+                        <div className={"col-md-7 mx-auto"}>
+                            <PlayerList/>
+                        </div>
+                    </div>
+                    {countdown > 0 ?
+                        <h5>
+                            Game starting in: {countdown}
+                        </h5>
+                        : <div className={"btn-group"}>
+                            <button className={ready ? "btn btn-danger" : "btn btn-success"} onClick={toggleReady}>{ready ? 'Unready' : 'ready'}</button>
+                            <button className={"btn btn-warning"} onClick={()=>{
+
+                                axios.post('http://localhost:4000/leaveGame')
+                                    .then((res)=> {
+                                        console.log('left the game');
+                                    })
+                                    .catch(err => console.log('error leaving game'));
+
+                                props.goTo('LobbyList');
+
+                            }}>Leave</button>
+                        </div>}
                 </div>
-                : <div>
-                    <button onClick={toggleReady}>{ready ? 'Unready' : 'ready'}</button>
-                    <button onClick={()=>{
-
-                        axios.post('http://localhost:4000/leaveGame')
-                            .then((res)=> {
-                                console.log('left the game');
-                            })
-                            .catch(err => console.log('error leaving game'));
-
-                        props.goTo('LobbyList');
-                        
-                        }}>Leave</button>
-                </div>}
+            </div>
         </center>
     );
 }

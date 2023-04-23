@@ -3,9 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function Results() {
-    const [players, setPlayers] = useState([{name: "", words: [""], score: 0}]);
+    const [players, setPlayers] = useState([{name: "Player 1", words: [], score: 0}, {name: "Player 2", words: [], score: 0}]);
     const [winnerName, setWinnerName] = useState("");
     let navigate = useNavigate();
+    const validWordScoreMatrix = [1, 2, 4, 7, 11, 16];
 
     let winner = "";
     let winnerScore = 0;
@@ -51,23 +52,46 @@ export function Results() {
 
     return (
         <center>
-            <h1>Results</h1>
-            {players.map((singlePerson, index) => (
-                <div key={index} id="player">
-                    <div id="name">Name: {singlePerson.name}</div>
-                    <h3>Words Found:</h3>
-                    <ul id="words">
-                        {singlePerson.words.map((singleWord, index) => (
-                            <li key={index}>{singleWord}</li>
-                        ))}
-                    </ul>
-                    <div id="score">Score: {singlePerson.score}</div>
+            <h1 className="mb-5 mt-5 display-4">Game Over!</h1>
+            <div className="card">
+                <div className="card-header">
+                    <div className="card-title"><h4>Game Results</h4></div>
                 </div>
-            ))}
+                <div className="card-body">
+                    <div className="card-deck">
+                        {players.map((singlePerson, index) => (
+                            <div className={singlePerson.name === winnerName ? "card shadow-lg" : "card"}>
+                                {singlePerson.name === winnerName ?
+                                    <div className="card-header bg-success text-light">
+                                        <h4>WINNER!</h4>
+                                    </div>
+                                    : null
+                                }
+                                <div className="card-body">
+                                    <h4>Player <strong>{singlePerson.name}</strong></h4>
+                                    <h6>Words Found:</h6>
+                                    <ul className="list-group">
+                                        {singlePerson.words.length > 0 ? singlePerson.words.map((singleWord, index) => (
+                                            <li className="list-group-item d-flex justify-content-between align-items-left" key={index}>
+                                                {singleWord}
+                                                <span className="badge badge-success">{singleWord.length > 8 ? 22 : validWordScoreMatrix[singleWord.length - 3]}</span>
+                                            </li>
+                                        )) : <p className="text-danger">Player couldn't find any words!</p>}
+                                    </ul>
+                                </div>
+                                <div className="card-footer">
+                                    <div id="score"><h6>Score: {singlePerson.score}</h6></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="card-footer">
+                    <h5>Thanks for playing!</h5>
+                </div>
+            </div>
             <div id="bottom">
-                <h2>Winner</h2>
-                <div id="winner">{winnerName}</div>
-                <button type="button" id="RTL" onClick={returnToLobby}>Lobby List</button>
+                <button className="btn btn-primary" type="button" id="RTL" onClick={returnToLobby}>Return to Lobby</button>
             </div>
         </center>
     );

@@ -11,6 +11,7 @@
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     
     <title>Grid Word Finder</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
@@ -19,12 +20,22 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="container-fluid text-center">
+    <div class="container-fluid text-center" id="container-root">
       <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-8 min-vh-100" id="main-content"><div id="root"></div></div>
-          <div class="col-md-2"></div>
+          <div class="col-md-1"></div>
+          <div class="col-md-10 min-vh-100" id="main-content"><div id="root"></div></div>
+          <div class="col-md-1"></div>
       </div>
   </div>
+  <script>
+    let backgroundChoice = "lettersBackground1.jpg";
+    switch (Math.floor(Math.random() * 5)) {
+      case 0: backgroundChoice = "letterBackround2.jpg"; break;
+      case 1: backgroundChoice = "letterBackground3.webp"; break;
+      case 2: backgroundChoice = "letterBackround4.jpg"; break;
+      case 3: backgroundChoice = "letterBackground5.jpeg"; break;
+    }
+    document.getElementById('container-root').style.backgroundImage = "url(./" + backgroundChoice + ")";
+  </script>
   </body>
 </html>
