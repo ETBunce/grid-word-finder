@@ -87,7 +87,7 @@ export function Results() {
                     </div>
                 </div>
                 <div className="card-footer">
-                    <h5>Thanks for playing!</h5>
+                    <h5>{winner === "You all suck" || winner === "" ? "No one won. You all suck" : "Thanks for playing!"}</h5>
                 </div>
             </div>
             <div id="bottom">
