@@ -161,7 +161,7 @@ export function GridGame() {
                 setWordSuccess("Word found! " + res.data.earnedPoints + " points added!");
                 setValidWord(true);
                 // add word to the display list
-                setWordList([...wordList, word]);
+                setWordList(res.data.wordsGuessed);
             } else {
                 setWordError("Not a valid word!");
                 setWordErrorFound(true);

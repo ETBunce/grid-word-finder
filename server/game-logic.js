@@ -284,6 +284,7 @@ exports.submitWord = async (req, res) => {
         responseToPlayer.success = true;
         responseToPlayer.validWord = true;
         responseToPlayer.earnedPoints = earnedScore;
+        responseToPlayer.wordsGuessed = currentWordsGuessed;
 
         for (let i = 0; i < currGame.players.length; i++) {
             if (currGame.players[i].name === myName) {
