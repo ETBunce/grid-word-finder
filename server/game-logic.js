@@ -144,20 +144,24 @@ function generateGrid() {
 //TODO: Test this function
 // 
 async function withGame(func, errorFunc, doNotSave) {
-    if (gameId === '') {
-        // console.log('withGame: current gameId is blank.');
-        return false;
+    try {
+        if (gameId === '') {
+            // console.log('withGame: current gameId is blank.');
+            return false;
+        }
+        await AppGame.findOne({_id: gameId})
+            .then((game) => {
+                func(game);
+                if (!doNotSave) game.save();
+            })
+            .catch((err) => {
+                console.log('error working with game: ' + err.message);
+                errorFunc && errorFunc(err);
+            });
+        return true; // Indicates the current game id has been set
+    } catch (err) {
+        console.log("An error occurred within withGame: %s", err.message);
     }
-    await AppGame.findOne({_id:gameId})
-    .then((game) => {
-        func(game);
-        if (!doNotSave) game.save();
-    })
-    .catch((err) => {
-        console.log('error working with game: ' + err.message);
-        errorFunc && errorFunc(err);
-    });
-    return true; // Indicates the current game id has been set
 }
 
 function addPlayer(game, playerName) {
