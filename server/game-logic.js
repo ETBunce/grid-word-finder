@@ -369,6 +369,11 @@ exports.setReady = async (ready, resultFunc) => {
 exports.leaveGame = async (resultFunc) => {
     const leaveName = myName;
     await withGame((game) => {
+
+        if (game.stage != 'Lobby') {
+            return;
+        }
+
         for (let i = 0; i < game.players.length; i++) {
             if (game.players[i].name === leaveName) {
                 game.players.splice(i,1);
