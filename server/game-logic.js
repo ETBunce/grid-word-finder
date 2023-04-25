@@ -245,10 +245,16 @@ exports.submitWord = async (req, res) => {
     // console.log("player name: %s", myName);
     // Make sure we have current game grid
     let gameOver = false;
-    await withGame((game) => {
-        currentGameGrid = game.grid;
-        gameOver = isGameOver(game);
-    })
+    let currGame = null;
+    await AppGame.findOne({_id: gameId})
+        .then((game) => {
+            currentGameGrid = game.grid;
+            gameOver = isGameOver(game);
+            currGame = game;
+        })
+        .catch((err) => {
+            console.log("Error getting game: %s", err.message);
+        })
 
     const guessedWord = req.body.word;
     const validWordScoreMatrix = [1, 2, 4, 7, 11, 16];
@@ -278,20 +284,34 @@ exports.submitWord = async (req, res) => {
         responseToPlayer.success = true;
         responseToPlayer.validWord = true;
         responseToPlayer.earnedPoints = earnedScore;
-        await withGame((game) => {
-            for (let i = 0; i < game.players.length; i++) {
-                if (game.players[i].name === myName) {
-                    game.players[i].score = currentScore;
-                    game.players[i].words = currentWordsGuessed;
-                } else {
-                    switch (i) {
-                        case 0: responseToPlayer.player1Score = game.players[i].score; break;
-                        case 1: responseToPlayer.player2Score = game.players[i].score; break;
-                        case 2: responseToPlayer.player3Score = game.players[i].score; break;
-                        case 3: responseToPlayer.player4Score = game.players[i].score; break;
-                    }
+
+        for (let i = 0; i < currGame.players.length; i++) {
+            if (currGame.players[i].name === myName) {
+                currGame.players[i].score = currentScore;
+                currGame.players[i].words = currentWordsGuessed;
+            } else {
+                switch (i) {
+                    case 0: responseToPlayer.player1Score = currGame.players[i].score; break;
+                    case 1: responseToPlayer.player2Score = currGame.players[i].score; break;
+                    case 2: responseToPlayer.player3Score = currGame.players[i].score; break;
+                    case 3: responseToPlayer.player4Score = currGame.players[i].score; break;
                 }
             }
+        }
+
+        await AppGame.findOneAndUpdate({_id: gameId}, {
+            players: currGame.players,
+            grid: currGame.grid,
+            startTime: currGame.startTime,
+            hostPlayerName: currGame.hostPlayerName,
+            canJoin: currGame.canJoin,
+            state: currGame.state
+        })
+        .then((obj) => {
+            console.log("Successfully updated obj!")
+        })
+        .catch((err) => {
+            console.log("Error updating obj! %s", err.message);
         })
     } else {
         // console.log("Player sent word: \"%s\" which is an invalid word", guessedWord);
