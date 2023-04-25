@@ -8,7 +8,7 @@ const GRID_WIDTH = 4;
 const GRID_HEIGHT = 4;
 const GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
 const MAX_PLAYERS = 4;
-const MIN_PLAYERS = 1; // TODO: Change this to 2 when done testing
+const MIN_PLAYERS = 2; // TODO: Change this to 2 when done testing
 const GAME_MATCH_TIME = 60;
 const GAME_DELETE_AGE = 10; // seconds
 
