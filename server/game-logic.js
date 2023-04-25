@@ -93,7 +93,7 @@ function updateLobby(game) {
         setTimeout(()=>{
             startGame(game);
             // console.log('game was started, grid is' , game.grid);
-            game.save();
+            // game.save();
         }, 3000);
         return 'Starting';
     }
@@ -386,7 +386,7 @@ exports.leaveGame = async (resultFunc) => {
         }
 
         resultFunc();
-        game.save();
+        // game.save();
     }, null, true);
     gameId = '';
     myName = '';
