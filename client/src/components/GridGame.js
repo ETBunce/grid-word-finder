@@ -154,28 +154,23 @@ export function GridGame() {
     function handleSubmit(e){
         e.preventDefault();
         setValidWord(false);
-        if(!wordList.includes(word)){
             // post method to submit word
-            axios.post("http://localhost:4000/submitWord", {word: word})
-            .then((res) => {
-                if(res.data.validWord){
-                    setWordSuccess("Word found! " + res.data.earnedPoints + " points added!");
-                    setValidWord(true);
-                    // add word to the display list
-                    setWordList([...wordList, word]);
-                } else {
-                    setWordError("Not a valid word!");
-                    setWordErrorFound(true);
-                }
-            })
-            .catch((err) => {
-                console.log("Error couldn't send word.");
-                console.log(err.message);
-            });
-        } else{
-            setWordError("Word already used!");
-            setWordErrorFound(true);
-        }
+        axios.post("http://localhost:4000/submitWord", {word: word})
+        .then((res) => {
+            if(res.data.validWord){
+                setWordSuccess("Word found! " + res.data.earnedPoints + " points added!");
+                setValidWord(true);
+                // add word to the display list
+                setWordList([...wordList, word]);
+            } else {
+                setWordError("Not a valid word!");
+                setWordErrorFound(true);
+            }
+        })
+        .catch((err) => {
+            console.log("Error couldn't send word.");
+            console.log(err.message);
+        });
     }
 
     useEffect(() => {
