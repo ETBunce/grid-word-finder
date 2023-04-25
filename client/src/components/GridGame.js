@@ -207,34 +207,27 @@ export function GridGame() {
             <div className="row">
                 <div className="col-lg-4">
                     <div id = "grid">
-                        <div className={"btn-group"}>
-                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(0)}>{board[0]}</button>
-                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(1)}>{board[1]}</button>
-                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(2)}>{board[2]}</button>
-                            <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(3)}>{board[3]}</button>
-                        </div>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(0)}>{board[0]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(1)}>{board[1]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(2)}>{board[2]}</button>
+                        <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(3)}>{board[3]}</button>
                         <br />
-                        <div className={"btn-group"}>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(4)}>{board[4]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(5)}>{board[5]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(6)}>{board[6]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(7)}>{board[7]}</button>
                         <br />
-                        </div>
-                            <div className={"btn-group"}>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(8)}>{board[8]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(9)}>{board[9]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(10)}>{board[10]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(11)}>{board[11]}</button>
                         <br />
-                            </div>
-                                <div className={"btn-group"}>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(12)}>{board[12]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(13)}>{board[13]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(14)}>{board[14]}</button>
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(15)}>{board[15]}</button>
-                                </div>
-                                </div><br />
+                        <br />
+                    </div>
                     <button type={"button"} className={"btn btn-warning"} onClick={() => undoClick()}>Undo</button><br /><br />
                     <div>
                         <div className="progress" style={{height: "25px"}}>
