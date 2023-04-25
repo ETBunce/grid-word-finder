@@ -228,6 +228,8 @@ export function GridGame() {
                         <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(15)}>{board[15]}</button>
                         <br />
                     </div>
+                    <br />
+                    <br />
                     <button type={"button"} className={"btn btn-warning"} onClick={() => undoClick()}>Undo</button><br /><br />
                     <div>
                         <div className="progress" style={{height: "25px"}}>

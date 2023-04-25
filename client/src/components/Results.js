@@ -40,6 +40,9 @@ export function Results() {
                             }
                         }
                     }
+                } else {
+                    console.log("Game is null!");
+                    window.location.reload();
                 }
                 setWinnerName(winner);
             })
