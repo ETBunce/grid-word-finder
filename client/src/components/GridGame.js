@@ -206,7 +206,7 @@ export function GridGame() {
             </div><br /><br />
             <div className="row">
                 <div className="col-lg-4">
-                    <div id = "grid">
+                    <div id = "grid" className="grid">
                         <div className={"btn-group"}>
                             <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(0)}>{board[0]}</button>
                             <button type={"button"} className={"btn btn-light btn-outline-dark btn-lg"} onClick={() => handleClick(1)}>{board[1]}</button>
