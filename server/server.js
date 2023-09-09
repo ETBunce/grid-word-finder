@@ -46,18 +46,5 @@ app.use(session({
 // Routes
 app.use('/', routes);
 
-
-// Logic
-
-//TESTING
-// gameLogic.startNewGame(['Kevin', 'Bob']);
-
-// setTimeout(() => {
-//     console.log("World!");
-//     gameLogic.submitWord('Kevin', 'BAZOOKA');
-//     gameLogic.submitWord('Bob', 'HAMMER');
-// }, 5000);
-
-
 // Listen
 app.listen(PORT, () => { console.log("server is running on http://localhost:4000"); });
