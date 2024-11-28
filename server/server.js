@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 //Session setup
 const store = new MongoDBStore({
-    uri: 'mongodb+srv://jzdegrey:cs3750@sandbox.t6lzk2q.mongodb.net/gridWordFinder',
+    uri: 'REDACTED/gridWordFinder',
     databaseName: 'grid-game-sessions',
 });
 
